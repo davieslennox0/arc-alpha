@@ -27,3 +27,13 @@ nohup: ignoring input
 2026-05-23 15:12:24,162 [Bob] Payment tx: 31cb97c7b6a313c6a5bca19721bc6a304f155bd554bc47a96ac4b7e5c72d41e8
 2026-05-23 15:12:26,635 [Bob] Response: success | direction: DOWN
 2026-05-23 15:12:26,635 [Bob] FX trade executed: https://testnet.arcscan.app/tx/0xd1fbc681e6ffc260f58535efb445dbf900c150018e5ef860dce363fcf75a534b
+2026-05-23 15:13:28,234 [Charlie] Balance: $20.0146 USDC | Scanning EURUSD...
+2026-05-23 15:13:28,234 [Charlie] Paying $0.05 x402 fee to broker...
+2026-05-23 15:13:29,093 [Charlie] Payment tx: 3b37b60427ca0ce9f9ac3e59f7e4b64133df7e4fd9c9fbd364916467c0aac67e
+2026-05-23 15:13:31,215 [Charlie] Response: success | direction: DOWN
+2026-05-23 15:13:31,216 [Charlie] FX trade executed: https://testnet.arcscan.app/tx/0xa6d90e7029a337f7eea9891b8f663465462d55c263c51c98ebe394aa7d320c64
+2026-05-23 15:16:21,476 [Alice] Balance: $15.8928 USDC | Scanning EURUSD...
+2026-05-23 15:16:21,477 [Alice] Paying $0.05 x402 fee to broker...
+2026-05-23 15:16:22,250 [Alice] Payment tx: 34a3dd5dacaa9e30a99e351eb63b2b88fb31b2e5d7488092a5590e7c45edbe77
+2026-05-23 15:16:24,096 [Alice] Response: success | direction: UP
+2026-05-23 15:16:24,096 [Alice] FX trade executed: https://testnet.arcscan.app/tx/0xd6c63ea0f98e4b79fe0b0f02dee67dcd31e6542a6c8d93742a32d8d029267e56

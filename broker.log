@@ -21,3 +21,7 @@ INFO:     127.0.0.1:56524 - "POST /execute HTTP/1.1" 200 OK
 INFO:     127.0.0.1:41634 - "POST /execute HTTP/1.1" 200 OK
 2026-05-23 15:12:26,633 [Monitor] Registered open trade: d1fbc681e6ff... EURUSD DOWN @ $0
 INFO:     127.0.0.1:36134 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 15:13:31,214 [Monitor] Registered open trade: a6d90e7029a3... EURUSD DOWN @ $0
+INFO:     127.0.0.1:34532 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 15:16:24,093 [Monitor] Registered open trade: d6c63ea0f98e... EURUSD UP @ $0
+INFO:     127.0.0.1:56876 - "POST /execute HTTP/1.1" 200 OK
