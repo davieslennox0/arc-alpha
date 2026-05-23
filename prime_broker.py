@@ -143,6 +143,9 @@ class ValidateRequest(BaseModel):
     confidence: float
     tx_hash: str
 
+# Track open positions for PnL calculation
+OPEN_POSITIONS = {}  # agent_id -> {"rate": float, "amount": float, "direction": str}
+
 # Agent registry — maps agent_id to wallet/key for FX execution
 AGENT_REGISTRY = {
     "alice":   {"wallet": os.getenv("AGENT_ALICE_ADDRESS"),   "key": os.getenv("AGENT_ALICE_KEY")},
@@ -203,20 +206,41 @@ def status():
         except:
             agent_balances[name] = 0
 
-    # Trade count from activity log
+    # Trade count and PnL from activity log
+    trade_count = 0
+    total_pnl = 0
     try:
         with open("activity_log.json") as f:
             import json as _json
             acts = _json.load(f)
-            trade_count = len([x for x in acts if x.get("status") == "success"])
+            success = [x for x in acts if x.get("status") == "success"]
+            trade_count = len(success)
+            # Calculate PnL per agent: pair UP→DOWN trades
+            agent_trades = {}
+            for t in success:
+                aid = t.get("agent_id", "")
+                agent_trades.setdefault(aid, []).append(t)
+            for aid, trades in agent_trades.items():
+                open_rate = None
+                for t in trades:
+                    rate = t.get("rate", 0)
+                    direction = t.get("direction", "")
+                    if direction.upper() == "UP":
+                        open_rate = rate
+                    elif direction.upper() == "DOWN" and open_rate:
+                        pnl = (rate - open_rate) / open_rate * 0.5
+                        total_pnl += pnl
+                        open_rate = None
     except:
         trade_count = 0
+        total_pnl = 0
 
     return {
         "portfolio_value_usdt": pv,
         "eurc_balance": eurc_bal,
         "agent_balances": agent_balances,
         "trade_count": trade_count,
+        "total_pnl": round(total_pnl, 6),
         "performance": stats,
         "leaderboard": board,
         "agent_earnings": AGENT_EARNINGS,

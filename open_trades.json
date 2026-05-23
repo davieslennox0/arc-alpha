@@ -1846,5 +1846,229 @@
       "asset": "EURUSD"
     },
     "opened_at": 1779566369
+  },
+  "64aefb4ab6633e63060fb1ba5723f93d2e48c157aa462da81fc2e4752ee7a43d": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779566579
+  },
+  "42531326ee2949fe191d2246a27a83ceb6c7b134ab651c5409d68a5689ec49d0": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779566672
+  },
+  "0e539907bbf584fbccc202338bf3845b6b9f0fe5f7ae7aa301af62798d3ff24e": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779566944
+  },
+  "cb03b77c427704f9737ea30f2ea2e4ed338218306f6df8c1237062ac6d55d2d1": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779566975
+  },
+  "403faa8d942c6184a5e270f20341f3b0bafb848ba24353cf609b601dadd9d634": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779567051
+  },
+  "3d5e2d6a552badffdf903973d572d87d5a4ca9a76a1ba47d1ba22189314008ec": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779567279
+  },
+  "7d314d9fedfcdc5b38adc1b534dde0dbbd77d8204fa19d5d8f01db47e380e1c4": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779567474
+  },
+  "6d5e079e45f2f94a63dccfdf77ba744085ae15c41fbe848edf11eedfa65b7dc2": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779567582
+  },
+  "f2e7a32e503ca0b6010140cc05150e1e76cca72e8519326dd2fdd0f5649ab6ae": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779567670
+  },
+  "c5c3cd2ad71fdeb4f06719e99805d308d31043ab54cf2c8da16fd078f19f985f": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779567885
+  },
+  "fc407f8a961b74eb61074b65f3407955e037fdbf39b4e1e31b1a7e7849f04fd5": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779567897
+  },
+  "e5661fdc64811dd4c77aa80d9ab1f09d4e1ec0781d65d263e42010b777ba8b07": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779568033
+  },
+  "145466a7df8fbfb7ffd89aff0c839b06cf38bec050ac9fd4915cda05ae431f9f": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779568321
+  },
+  "452347ce3825e09b3e38ff7d6bde939aa38033c7519dc586aff141d7398bf7db": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779568397
+  },
+  "12c1354921165cd5eac4a2d1044a780824d631d6440e1a5bea648e4f3cd60dcc": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779568491
+  },
+  "94daff32dbbb8f98dd765bdfc47730caf47bb03696fdff76c0b03bb9d7254f9a": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779568744
   }
 }

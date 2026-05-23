@@ -136,3 +136,23 @@
 2026-05-23 19:56:55,515 [Monitor] Registered open trade: 8c3ff984a355... EURUSD UP @ $0
 2026-05-23 19:59:29,079 [Monitor] Registered open trade: 0f837f8efa1d... EURUSD UP @ $0
 2026-05-23 19:59:56,754 [Monitor] Trade monitor started as background thread
+2026-05-23 20:02:59,571 [Monitor] Registered open trade: 64aefb4ab663... EURUSD DOWN @ $0
+2026-05-23 20:03:48,276 [Monitor] Registered open trade: 394f0f10b5c7... EURUSD DOWN @ $0
+2026-05-23 20:04:32,631 [Monitor] Registered open trade: 42531326ee29... EURUSD DOWN @ $0
+2026-05-23 20:09:04,030 [Monitor] Registered open trade: 0e539907bbf5... EURUSD UP @ $0
+2026-05-23 20:09:35,868 [Monitor] Registered open trade: cb03b77c4277... EURUSD UP @ $0
+2026-05-23 20:10:51,777 [Monitor] Registered open trade: 403faa8d942c... EURUSD UP @ $0
+2026-05-23 20:14:39,345 [Monitor] Registered open trade: 3d5e2d6a552b... EURUSD DOWN @ $0
+2026-05-23 20:15:07,531 [Monitor] Registered open trade: f49fdc687694... EURUSD DOWN @ $0
+2026-05-23 20:17:54,807 [Monitor] Registered open trade: 7d314d9fedfc... EURUSD DOWN @ $0
+2026-05-23 20:19:42,259 [Monitor] Registered open trade: 6d5e079e45f2... EURUSD UP @ $0
+2026-05-23 20:21:10,405 [Monitor] Registered open trade: f2e7a32e503c... EURUSD UP @ $0
+2026-05-23 20:24:45,493 [Monitor] Registered open trade: c5c3cd2ad71f... EURUSD DOWN @ $0
+2026-05-23 20:24:57,707 [Monitor] Registered open trade: fc407f8a961b... EURUSD UP @ $0
+2026-05-23 20:27:13,593 [Monitor] Registered open trade: e5661fdc6481... EURUSD DOWN @ $0
+2026-05-23 20:29:47,969 [Monitor] Registered open trade: 24e88e65972a... EURUSD UP @ $0
+2026-05-23 20:32:01,513 [Monitor] Registered open trade: 145466a7df8f... EURUSD DOWN @ $0
+2026-05-23 20:33:17,418 [Monitor] Registered open trade: 452347ce3825... EURUSD UP @ $0
+2026-05-23 20:34:51,502 [Monitor] Registered open trade: 12c135492116... EURUSD DOWN @ $0
+2026-05-23 20:34:57,958 [Monitor] Trade monitor started as background thread
+2026-05-23 20:39:04,463 [Monitor] Registered open trade: 94daff32dbbb... EURUSD UP @ $0
