@@ -345,15 +345,15 @@
   /* AGENT CARDS */
   .agent-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
+    gap: 8px;
     margin-bottom: 24px;
   }
 
   .agent-card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    padding: 16px;
+    padding: 10px;
     position: relative;
     overflow: hidden;
     transition: border-color 0.2s;
@@ -392,7 +392,7 @@
 
   .agent-balance {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 300;
     color: var(--white);
     line-height: 1;
@@ -1341,15 +1341,17 @@
         const typeLabel = isSuccess ? (item.direction === 'UP' ? 'BUY' : 'SELL') : status.toUpperCase();
         const typeClass = isSuccess ? (item.direction === 'UP' ? 'buy' : 'sell') : '';
         const hash = item.tx_hash || '';
-        const shortHash = hash ? hash.slice(0,12) + '...' : '—';
+        const shortHash = hash ? hash.slice(0,10) + '...' : '—';
         const explorerUrl = hash ? `https://testnet.arcscan.app/tx/0x${hash}` : '#';
+        const agentColors = {alice: 'var(--green)', bob: 'var(--blue)', charlie: 'var(--gold)'};
+        const agentColor = agentColors[(item.agent_id||'').toLowerCase()] || 'var(--text)';
 
         html += `<div class="feed-row">
           <span class="time">${time}</span>
-          <span class="agent">${agent}</span>
+          <span class="agent" style="color:${agentColor}">${agent}</span>
           <span class="type ${typeClass}">${typeLabel}</span>
           <span class="amount">$0.50</span>
-          <span class="hash"><a href="${explorerUrl}" target="_blank">${shortHash}</a></span>
+          <span class="hash"><a href="${explorerUrl}" target="_blank" title="${hash}">${shortHash}</a></span>
         </div>`;
       });
 
