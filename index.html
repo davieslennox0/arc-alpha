@@ -136,7 +136,7 @@
   .main {
     margin-top: 40px;
     display: grid;
-    grid-template-columns: 220px 1fr 280px;
+    grid-template-columns: 200px 1fr 340px;
     grid-template-rows: auto 1fr;
     min-height: calc(100vh - 40px);
   }
@@ -1319,7 +1319,7 @@
 
   async function fetchActivity() {
     try {
-      const r = await fetch(`${BROKER}/activity`);
+      const r = await fetch(`${BROKER}/activity`, {mode:'cors'});
       const items = await r.json();
       if (!Array.isArray(items)) return;
 
