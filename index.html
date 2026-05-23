@@ -1345,7 +1345,8 @@
         const typeClass = isSuccess ? (item.direction === 'UP' ? 'buy' : 'sell') : '';
         const hash = item.tx_hash || '';
         const shortHash = hash ? hash.slice(0,10) + '...' : '—';
-        const explorerUrl = hash ? `https://testnet.arcscan.app/tx/0x${hash}` : '#';
+        const cleanHash = hash.startsWith('0x') ? hash : '0x' + hash;
+        const explorerUrl = hash ? `https://testnet.arcscan.app/tx/${cleanHash}` : '#';
         const agentColors = {alice: 'var(--green)', bob: 'var(--blue)', charlie: 'var(--gold)'};
         const agentColor = agentColors[(item.agent_id||'').toLowerCase()] || 'var(--text)';
 
