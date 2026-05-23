@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlphaFX — AI FX Prime Broker</title>
+<title>AlphaLoop Arc — AI FX Prime Broker</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -345,15 +345,15 @@
   /* AGENT CARDS */
   .agent-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(140px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
     margin-bottom: 24px;
   }
 
   .agent-card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    padding: 10px;
+    padding: 16px;
     position: relative;
     overflow: hidden;
     transition: border-color 0.2s;
@@ -392,7 +392,7 @@
 
   .agent-balance {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 300;
     color: var(--white);
     line-height: 1;
@@ -487,7 +487,7 @@
 
   .feed-row {
     display: grid;
-    grid-template-columns: 70px 55px 55px 65px 1fr;
+    grid-template-columns: 60px 50px 60px 70px 1fr;
     padding: 7px 14px;
     border-bottom: 1px solid var(--border);
     font-family: 'IBM Plex Mono', monospace;
@@ -783,7 +783,7 @@
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-logo">AlphaFX</div>
+  <div class="topbar-logo">AlphaLoop Arc</div>
   <div class="topbar-divider"></div>
 
   <div class="ticker-wrap" style="max-width: 600px;">
@@ -1015,14 +1015,14 @@
             <span class="feed-live-label">LIVE</span>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:70px 55px 55px 65px 1fr;padding:6px 14px;border-bottom:1px solid var(--border);background:var(--bg3);">
+        <div style="display:grid;grid-template-columns:60px 50px 60px 70px 1fr;padding:6px 14px;border-bottom:1px solid var(--border);background:var(--bg3);">
           <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">TIME</span>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">AGENT</span>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">TYPE</span>
           <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">AMOUNT</span>
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">TX ↗</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">TX HASH</span>
         </div>
-        <div class="feed-body" id="feed-body" style="max-height:250px;">
+        <div class="feed-body" id="feed-body">
           <div style="padding:20px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">
             Connecting to broker...
           </div>
@@ -1126,29 +1126,13 @@
   </div>
 </div>
 
-<!-- FULL WIDTH TRADE FEED -->
-<div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:28px;">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:var(--bg3);border-bottom:1px solid var(--border);">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;">Live Execution Feed · Arc Testnet</span>
-    <div style="display:flex;align-items:center;gap:6px;"><div style="width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 1s ease-in-out infinite;"></div><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--red);">LIVE</span></div>
-  </div>
-  <div style="display:grid;grid-template-columns:80px 80px 70px 80px 1fr;padding:6px 20px;border-bottom:1px solid var(--border);background:var(--bg3);">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">TIME</span>
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">AGENT</span>
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">TYPE</span>
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">AMOUNT</span>
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">TX HASH ↗</span>
-  </div>
-  <div id="feed-body-full" style="max-height:200px;overflow-y:auto;"></div>
-</div>
-
 <!-- FOOTER BAR -->
 <div class="footerbar">
   <div class="fb-item"><span class="key">BROKER</span><span class="val">0xB9d6...e40d</span></div>
   <div class="fb-item"><span class="key">NETWORK</span><span class="val">Arc Testnet · 5042002</span></div>
   <div class="fb-item"><span class="key">AGENTS</span><span class="val green">3 / 3 LIVE</span></div>
   <div class="fb-item"><span class="key">SETTLEMENT</span><span class="val green">USDC ↔ EURC</span></div>
-  <div class="fb-right">AlphaFX · Agora Agents Hackathon · Canteen × Circle · 2026</div>
+  <div class="fb-right">AlphaLoop Arc · Agora Agents Hackathon · Canteen × Circle · 2026</div>
 </div>
 
 <script>
@@ -1316,10 +1300,7 @@
 
       const perf = d.performance || {};
       document.getElementById('stat-wr').textContent = (perf.win_rate || 0).toFixed(1) + '%';
-      const totalPnl = d.total_pnl || 0;
-      const pnlEl = document.getElementById('stat-pnl');
-      pnlEl.textContent = (totalPnl >= 0 ? '+$' : '-$') + Math.abs(totalPnl).toFixed(4);
-      pnlEl.style.color = totalPnl >= 0 ? 'var(--green)' : 'var(--red)';
+      document.getElementById('stat-pnl').textContent = '$' + (perf.total_pnl_usdt || 0).toFixed(4);
       document.getElementById('stat-sharpe').textContent = (perf.sharpe_ratio || 0).toFixed(2);
 
       const total = d.trade_count || 0;
@@ -1339,11 +1320,10 @@
   async function fetchActivity() {
     try {
       const r = await fetch(`${BROKER}/activity`);
-      const data = await r.json();
-      const items = Array.isArray(data) ? data : (data.activity || []);
-      if (!items.length) return;
+      const items = await r.json();
+      if (!Array.isArray(items)) return;
 
-      const feed = document.getElementById("feed-body-full")');
+      const feed = document.getElementById('feed-body');
       let html = '';
       const recent = items.slice(-20).reverse();
 
@@ -1361,18 +1341,15 @@
         const typeLabel = isSuccess ? (item.direction === 'UP' ? 'BUY' : 'SELL') : status.toUpperCase();
         const typeClass = isSuccess ? (item.direction === 'UP' ? 'buy' : 'sell') : '';
         const hash = item.tx_hash || '';
-        const shortHash = hash ? hash.slice(0,10) + '...' : '—';
-        const cleanHash = hash.startsWith('0x') ? hash : '0x' + hash;
-        const explorerUrl = hash ? `https://testnet.arcscan.app/tx/${cleanHash}` : '#';
-        const agentColors = {alice: 'var(--green)', bob: 'var(--blue)', charlie: 'var(--gold)'};
-        const agentColor = agentColors[(item.agent_id||'').toLowerCase()] || 'var(--text)';
+        const shortHash = hash ? hash.slice(0,12) + '...' : '—';
+        const explorerUrl = hash ? `https://testnet.arcscan.app/tx/0x${hash}` : '#';
 
-        html += `<div class="feed-row" style="cursor:pointer;" onclick="window.open('${explorerUrl}','_blank')">
+        html += `<div class="feed-row">
           <span class="time">${time}</span>
-          <span class="agent" style="color:${agentColor}">${agent}</span>
+          <span class="agent">${agent}</span>
           <span class="type ${typeClass}">${typeLabel}</span>
           <span class="amount">$0.50</span>
-          <span style="color:var(--blue);font-size:9px;font-family:'IBM Plex Mono',monospace;">${shortHash} ↗</span>
+          <span class="hash"><a href="${explorerUrl}" target="_blank">${shortHash}</a></span>
         </div>`;
       });
 
