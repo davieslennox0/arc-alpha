@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "okx-agentic-wallet": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "skillPath": "skills/okx-agentic-wallet/SKILL.md",
+      "computedHash": "a723affd62da86b9f6d46b21b7f4851e0226326b253b7fa956a669527640c88d"
+    },
+    "polymarket-plugin": {
+      "source": "okx/plugin-store",
+      "sourceType": "github",
+      "skillPath": "skills/polymarket-plugin/SKILL.md",
+      "computedHash": "9ddddd272207ac213a6784ecc0e7ed515143ad5cf6a18ea0a2f0952c2bef07e1"
+    }
+  }
+}

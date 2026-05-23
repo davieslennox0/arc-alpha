@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlphaLoop — Prime Broker for AI Agents</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FFFFFF;
+  --surface:#F8F9FA;
+  --surface2:#F1F3F5;
+  --border:#E9ECEF;
+  --border2:#DEE2E6;
+  --text:#0D1117;
+  --muted:#6C757D;
+  --amber:#F5A623;
+  --amber-light:#FFF3CD;
+  --amber-dark:#C67F00;
+  --green:#198754;
+  --green-light:#D1E7DD;
+  --red:#DC3545;
+  --red-light:#F8D7DA;
+  --blue:#0D6EFD;
+  --blue-light:#CFE2FF;
+  --scout-bg:#0D1117;
+  --scout-surface:#161B22;
+  --scout-border:#21262D;
+  --scout-text:#F0F6FC;
+  --scout-muted:#8B949E;
+  --mono:'Roboto Mono',monospace;
+  --sans:'Roboto',sans-serif;
+  --shadow:0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:0 4px 6px rgba(0,0,0,0.07);
+  --shadow-lg:0 10px 15px rgba(0,0,0,0.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;font-size:15px;line-height:1.6;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--surface);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,17,23,0.97);backdrop-filter:blur(10px);border-bottom:1px solid #21262D;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;}
+.nav-logo{font-family:var(--sans);font-size:1.1rem;font-weight:900;color:#F0F6FC;letter-spacing:-0.03em;cursor:pointer;}
+.nav-logo span{color:var(--amber);}
+.nav-links{display:flex;gap:0.25rem;list-style:none;}
+.nav-links a{font-size:0.82rem;font-weight:500;color:#8B949E;text-decoration:none;padding:0.4rem 0.85rem;border-radius:6px;transition:all 0.15s;cursor:pointer;}
+.nav-links a:hover,.nav-links a.active{background:#21262D;color:#F0F6FC;}
+.nav-badge{display:flex;align-items:center;gap:0.5rem;background:rgba(25,135,84,0.15);color:#2DA44E;padding:0.3rem 0.75rem;border-radius:20px;font-size:0.72rem;font-weight:600;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#2DA44E;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* PAGES */
+.page{display:none;padding-top:60px;}
+.page.active{display:block;}
+
+/* ── SCOUT SECTION (dark) ── */
+.scout-section{background:var(--scout-bg);color:var(--scout-text);}
+.scout-inner{max-width:1280px;margin:0 auto;padding:3rem 2rem;}
+.scout-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.scout-title-area{}
+.scout-label{font-size:0.68rem;font-weight:700;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;}
+.scout-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;letter-spacing:-0.02em;color:var(--scout-text);}
+.scout-sub{font-size:0.85rem;color:var(--scout-muted);margin-top:0.4rem;}
+.scout-live-badge{display:flex;align-items:center;gap:0.5rem;background:#161B22;border:1px solid #30363D;padding:0.5rem 1rem;border-radius:8px;font-size:0.75rem;color:#2DA44E;font-weight:600;}
+
+/* Scout activity cards row */
+.scout-activity-row{display:grid;grid-template-columns:1fr 2fr 1fr;gap:1rem;margin-bottom:2rem;}
+
+/* Latest signal card */
+.scout-signal-card{background:var(--scout-surface);border:1px solid var(--scout-border);border-radius:12px;padding:1.5rem;}
+.scout-card-label{font-size:0.65rem;font-weight:700;color:var(--scout-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;}
+.signal-big{font-size:2rem;font-weight:900;margin-bottom:0.25rem;}
+.signal-bull{color:#2DA44E;}
+.signal-bear{color:#F85149;}
+.signal-neu{color:#8B949E;}
+.signal-conf{font-family:var(--mono);font-size:0.85rem;color:var(--scout-muted);margin-bottom:0.75rem;}
+.signal-reasoning{font-size:0.78rem;color:var(--scout-muted);line-height:1.6;border-top:1px solid var(--scout-border);padding-top:0.75rem;}
+
+/* Scout feed table */
+.scout-feed-card{background:var(--scout-surface);border:1px solid var(--scout-border);border-radius:12px;overflow:hidden;}
+.scout-feed-header{display:grid;grid-template-columns:3.5rem 4rem 1fr 7rem;gap:0.75rem;padding:0.75rem 1.25rem;border-bottom:1px solid var(--scout-border);font-size:0.65rem;font-weight:700;color:var(--scout-muted);letter-spacing:0.08em;text-transform:uppercase;}
+.scout-feed-row{display:grid;grid-template-columns:3.5rem 4rem 1fr 7rem;gap:0.75rem;padding:0.875rem 1.25rem;border-bottom:1px solid var(--scout-border);font-size:0.78rem;transition:background 0.1s;}
+.scout-feed-row:last-child{border-bottom:none;}
+.scout-feed-row:hover{background:rgba(255,255,255,0.03);}
+.sf-agent{font-family:var(--mono);font-weight:600;color:var(--amber);}
+.sf-signal-bull{color:#2DA44E;font-weight:700;}
+.sf-signal-bear{color:#F85149;font-weight:700;}
+.sf-signal-neu{color:#8B949E;font-weight:600;}
+.sf-reason{color:var(--scout-muted);line-height:1.5;}
+.sf-market a{color:#FFFFFF;font-size:0.72rem;text-decoration:none;}
+.sf-market a:hover{text-decoration:underline;}
+
+/* Polymarket outcome card */
+.scout-outcome-card{background:var(--scout-surface);border:1px solid var(--scout-border);border-radius:12px;padding:1.5rem;}
+.outcome-market{font-size:0.82rem;font-weight:600;color:var(--scout-text);margin-bottom:0.75rem;line-height:1.5;}
+.outcome-prices{display:flex;gap:0.75rem;margin-bottom:1rem;}
+.outcome-price-box{flex:1;background:var(--scout-bg);border:1px solid var(--scout-border);border-radius:8px;padding:0.75rem;text-align:center;}
+.outcome-price-label{font-size:0.65rem;font-weight:700;letter-spacing:0.06em;margin-bottom:0.25rem;}
+.outcome-price-yes{color:#2DA44E;}
+.outcome-price-no{color:#F85149;}
+.outcome-price-val{font-family:var(--mono);font-size:1.2rem;font-weight:700;color:var(--scout-text);}
+.outcome-vol{font-size:0.72rem;color:var(--scout-muted);}
+.outcome-link a{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.75rem;color:var(--amber);text-decoration:none;font-weight:600;margin-top:0.75rem;}
+.outcome-link a:hover{text-decoration:underline;}
+
+/* Scout news strip */
+.scout-news-strip{display:flex;gap:0.75rem;flex-wrap:wrap;}
+.news-chip{background:var(--scout-surface);border:1px solid var(--scout-border);border-radius:6px;padding:0.5rem 0.875rem;font-size:0.75rem;color:var(--scout-muted);flex:1;min-width:200px;}
+.news-chip-label{font-size:0.6rem;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.25rem;}
+
+/* ── BROKER SECTION (white) ── */
+.broker-section{background:var(--bg);}
+.broker-inner{max-width:1280px;margin:0 auto;padding:3rem 2rem;}
+.broker-header{margin-bottom:2rem;}
+.broker-label{font-size:0.68rem;font-weight:700;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;}
+.broker-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;letter-spacing:-0.02em;color:var(--text);}
+.broker-sub{font-size:0.85rem;color:var(--muted);margin-top:0.4rem;}
+
+/* Price ticker */
+.price-ticker{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:2rem;}
+.price-chip{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.875rem 1.25rem;flex:1;min-width:120px;}
+.price-sym{font-size:0.65rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;margin-bottom:0.25rem;}
+.price-val{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--text);}
+.price-live{font-size:0.65rem;color:var(--green);font-weight:600;margin-top:0.2rem;}
+
+/* Stats row */
+.broker-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;margin-bottom:2rem;}
+.broker-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;}
+.bstat-label{font-size:0.65rem;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.4rem;}
+.bstat-val{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--text);}
+.bstat-val.green{color:var(--green);}
+.bstat-val.amber{color:var(--amber-dark);}
+.bstat-val.red{color:var(--red);}
+
+/* Tables */
+.tbl-wrap{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.5rem;}
+.tbl-title{font-size:0.7rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;padding:0.875rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;}
+.tbl-header{display:grid;padding:0.65rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.63rem;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;background:var(--surface2);}
+.tbl-row{display:grid;padding:0.8rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.8rem;transition:background 0.1s;}
+.tbl-row:last-child{border-bottom:none;}
+.tbl-row:hover{background:var(--surface);}
+.empty-row{padding:2rem;text-align:center;color:var(--muted);font-size:0.82rem;}
+
+/* leaderboard */
+.lb-grid{grid-template-columns:2rem 1fr 5rem 5rem 5rem 6rem;gap:1rem;}
+.lb-rank{color:var(--muted);font-weight:700;font-family:var(--mono);}
+.lb-strat{font-weight:600;text-transform:capitalize;}
+.alloc-bar{height:4px;background:var(--border);border-radius:2px;margin-top:0.4rem;overflow:hidden;}
+.alloc-fill{height:100%;background:var(--amber);border-radius:2px;transition:width 1s;}
+
+/* trade feed */
+.feed-grid{grid-template-columns:4rem 4rem 5rem 1fr 5rem;gap:0.75rem;align-items:center;}
+.feed-asset{font-family:var(--mono);font-weight:700;}
+.feed-agent{color:var(--muted);}
+.badge-ok{background:var(--green-light);color:var(--green);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.65rem;font-weight:700;}
+.badge-wait{background:var(--surface2);color:var(--muted);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.65rem;font-weight:600;}
+.feed-tx a{color:var(--amber-dark);font-size:0.72rem;text-decoration:none;font-weight:600;}
+.feed-tx a:hover{text-decoration:underline;}
+.feed-time{color:var(--muted);font-size:0.7rem;font-family:var(--mono);}
+
+/* Agent cards */
+.agent-grid-broker{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem;margin-bottom:2rem;}
+.agent-chip{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem;}
+.agent-chip-num{font-size:0.6rem;font-weight:700;color:var(--muted);letter-spacing:0.1em;margin-bottom:0.4rem;}
+.agent-chip-name{font-size:0.9rem;font-weight:700;margin-bottom:0.2rem;}
+.agent-chip-earn{font-family:var(--mono);font-size:0.95rem;font-weight:700;color:var(--green);}
+.agent-chip-badge{display:inline-block;font-size:0.6rem;font-weight:700;background:var(--amber-light);color:var(--amber-dark);padding:0.15rem 0.5rem;border-radius:4px;margin-top:0.4rem;}
+
+/* Hero */
+.hero-split{max-width:1280px;margin:0 auto;padding:3.5rem 2rem 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--amber-light);color:var(--amber-dark);padding:0.3rem 0.85rem;border-radius:20px;font-size:0.68rem;font-weight:700;letter-spacing:0.05em;margin-bottom:1.25rem;}
+h1{font-size:clamp(2.2rem,3.5vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-0.03em;margin-bottom:1rem;}
+h1 em{font-style:normal;color:var(--amber);}
+.hero-sub-text{font-size:0.92rem;color:var(--muted);line-height:1.75;margin-bottom:2rem;max-width:460px;}
+.cta-row{display:flex;gap:0.75rem;flex-wrap:wrap;}
+.btn-dark{background:var(--text);color:#fff;font-size:0.85rem;font-weight:600;padding:0.7rem 1.5rem;border:none;border-radius:8px;cursor:pointer;text-decoration:none;transition:opacity 0.15s;}
+.btn-dark:hover{opacity:0.85;}
+.btn-outline{background:var(--bg);color:var(--text);font-size:0.85rem;font-weight:500;padding:0.7rem 1.5rem;border:1.5px solid var(--border2);border-radius:8px;cursor:pointer;text-decoration:none;transition:all 0.15s;}
+.btn-outline:hover{border-color:var(--text);}
+
+/* Quick stats in hero */
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;}
+.hero-stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.875rem;text-align:center;}
+.hero-stat-val{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:var(--text);}
+.hero-stat-label{font-size:0.62rem;color:var(--muted);font-weight:600;margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.05em;}
+
+/* Flow */
+.flow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.flow-step{background:var(--bg);padding:1.5rem;}
+.flow-num{font-family:var(--mono);font-size:0.68rem;font-weight:700;color:var(--amber-dark);margin-bottom:0.5rem;}
+.flow-step h3{font-size:0.88rem;font-weight:700;margin-bottom:0.35rem;}
+.flow-step p{font-size:0.78rem;color:var(--muted);line-height:1.6;}
+.flow-tag{font-size:0.6rem;font-weight:600;color:var(--muted);margin-top:0.4rem;letter-spacing:0.04em;}
+
+/* API */
+.api-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0.75rem;}
+.api-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem;}
+.api-method{font-size:0.63rem;font-weight:700;padding:0.18rem 0.55rem;border-radius:4px;display:inline-block;margin-bottom:0.5rem;}
+.get-b{background:var(--green-light);color:var(--green);}
+.post-b{background:var(--amber-light);color:var(--amber-dark);}
+.api-path{font-family:var(--mono);font-size:0.85rem;font-weight:600;margin-bottom:0.35rem;}
+.api-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;margin-bottom:0.5rem;}
+.api-price{font-family:var(--mono);font-size:0.7rem;color:var(--amber-dark);font-weight:700;}
+
+/* Code */
+.code-block{background:#0D1117;color:#C9D1D9;border-radius:10px;padding:1.25rem 1.5rem;font-family:var(--mono);font-size:0.78rem;line-height:1.8;overflow-x:auto;margin-top:1rem;}
+.code-block .kw{color:#F5A623;}
+.code-block .str{color:#7EE787;}
+.code-block .cm{color:#6E7681;}
+
+/* Notice */
+.notice{background:var(--amber-light);border:1px solid #FFDE9A;border-radius:8px;padding:0.75rem 1rem;font-size:0.78rem;color:var(--amber-dark);font-weight:500;margin-bottom:1.5rem;word-break:break-all;}
+
+/* Section divider */
+.sec-divider{height:1px;background:var(--border);margin:0;}
+.dark-divider{height:1px;background:var(--scout-border);margin:0;}
+
+/* Docs */
+.endpoint-block{border:1px solid var(--border);border-radius:10px;margin-bottom:1rem;overflow:hidden;}
+.endpoint-header{display:flex;align-items:center;gap:0.75rem;padding:0.875rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border);}
+.endpoint-body{padding:1.25rem;}
+.endpoint-body p{color:var(--muted);font-size:0.82rem;line-height:1.7;margin-bottom:0.75rem;}
+.param-table{width:100%;border-collapse:collapse;font-size:0.78rem;}
+.param-table th{text-align:left;color:var(--muted);font-size:0.65rem;letter-spacing:0.06em;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border);background:var(--surface);}
+.param-table td{padding:0.55rem 0.75rem;border-bottom:1px solid var(--border);}
+.param-table tr:last-child td{border-bottom:none;}
+.param-name{color:var(--amber-dark);font-family:var(--mono);font-weight:600;}
+.param-req{color:var(--green);font-size:0.65rem;font-weight:700;}
+
+/* Agent status */
+.agent-live-grid{display:grid;gap:0.75rem;}
+.agent-live-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1.1rem;display:grid;grid-template-columns:1fr auto auto;gap:1rem;align-items:center;}
+.agent-live-info h3{font-size:0.9rem;font-weight:700;margin-bottom:0.15rem;}
+.agent-live-info p{font-size:0.75rem;color:var(--muted);}
+.agent-live-stat{text-align:center;}
+.agent-live-val{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--green);}
+.agent-live-label{font-size:0.6rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-top:0.15rem;}
+.status-active{font-size:0.65rem;font-weight:700;padding:0.25rem 0.6rem;border-radius:20px;background:var(--green-light);color:var(--green);}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1280px;margin:0 auto;}
+.footer-logo{font-weight:900;font-size:0.95rem;color:var(--text);}
+.footer-logo span{color:var(--amber);}
+.footer-links{display:flex;gap:1.25rem;list-style:none;}
+.footer-links a{font-size:0.75rem;color:var(--muted);text-decoration:none;cursor:pointer;transition:color 0.15s;}
+.footer-links a:hover{color:var(--text);}
+.footer-meta{font-size:0.7rem;color:var(--muted);}
+
+@media(max-width:768px){
+  .hero-split{grid-template-columns:1fr;gap:1.5rem;}
+  .scout-activity-row{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .lb-grid{grid-template-columns:2rem 1fr 4rem 4rem;}
+  .lb-grid>*:nth-child(4),.lb-grid>*:nth-child(5){display:none;}
+  .feed-grid{grid-template-columns:3.5rem 3.5rem 1fr 4rem;}
+  .feed-grid>*:nth-child(5){display:none;}
+  .agent-live-card{grid-template-columns:1fr;}
+  footer{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">Alpha<span>Loop</span></div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showPage('home');scrollTo('#broker-section')">Prime Broker</a></li>
+    <li><a onclick="showPage('docs')" id="nav-docs">API Docs</a></li>
+    <li><a onclick="showPage('agents')" id="nav-agents">Agent Status</a></li>
+  </ul>
+  <div class="nav-badge"><div class="live-dot"></div>X Layer Mainnet</div>
+</nav>
+
+<!-- ═══════ HOME PAGE ═══════ -->
+<div id="page-home" class="page active">
+
+<!-- ── SCOUT SECTION (dark) ── -->
+<div class="scout-section">
+  <div class="scout-inner">
+
+    <!-- Header -->
+    <div class="scout-header">
+      <div class="scout-title-area">
+        <div class="scout-label">⬡ Scout Intelligence · Powered by Groq AI</div>
+        <div class="scout-title">Live Polymarket Signals</div>
+        <div class="scout-sub">News fetched · AI analyzed · Matched to prediction markets · $0.001 USDC per signal</div>
+      </div>
+      <div class="scout-live-badge"><div class="live-dot"></div>Agents scanning now</div>
+    </div>
+
+    <!-- 3-column activity row -->
+    <div class="scout-activity-row">
+
+      <!-- Latest signal -->
+      <div class="scout-signal-card">
+        <div class="scout-card-label">Latest Signal</div>
+        <div class="signal-big signal-bull" id="scout-latest-signal">—</div>
+        <div class="signal-conf" id="scout-latest-conf">Confidence: —</div>
+        <div class="signal-conf" style="margin-bottom:0.5rem" id="scout-latest-agent">Agent: —</div>
+        <div class="signal-reasoning" id="scout-latest-reason">Waiting for scout agents...</div>
+      </div>
+
+      <!-- Scout feed -->
+      <div class="scout-feed-card">
+        <div class="scout-feed-header"><div>Agent</div><div>Signal</div><div>Analysis</div><div>Polymarket</div></div>
+        <div id="scout-feed-rows"><div class="empty-row" style="color:#8B949E;padding:2rem;text-align:center;font-size:0.8rem">Agents scanning markets...</div></div>
+      </div>
+
+      <!-- Best Polymarket market -->
+      <div class="scout-outcome-card">
+        <div class="scout-card-label">Best Matched Market</div>
+        <div class="outcome-market" id="scout-best-market">Waiting for signal...</div>
+        <div class="outcome-prices">
+          <div class="outcome-price-box">
+            <div class="outcome-price-label outcome-price-yes">YES</div>
+            <div class="outcome-price-val" id="scout-yes-price">—</div>
+          </div>
+          <div class="outcome-price-box">
+            <div class="outcome-price-label outcome-price-no">NO</div>
+            <div class="outcome-price-val" id="scout-no-price">—</div>
+          </div>
+        </div>
+        <div class="outcome-vol" id="scout-vol">Volume: —</div>
+        <div class="outcome-link" id="scout-market-link"></div>
+      </div>
+    </div>
+
+    <!-- News chips -->
+    <div class="scout-card-label" style="margin-bottom:0.75rem">Latest News Sources</div>
+    <div class="scout-news-strip" id="scout-news-strip">
+      <div class="news-chip"><div class="news-chip-label">Source</div>Waiting for news fetch...</div>
+    </div>
+  </div>
+</div>
+
+<div class="dark-divider"></div>
+
+<!-- ── BROKER SECTION (white) ── -->
+<div class="broker-section" id="broker-section">
+  <div class="broker-inner">
+
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <div class="broker-label">AlphaLoop Prime Broker · X Layer</div>
+        <div class="broker-title">The execution layer<br>for <span style="color:var(--amber)">AI agents</span> that trade.</div>
+        <div class="broker-sub">Pay x402. Get a signed on-chain receipt. No SDKs. No accounts.</div>
+      </div>
+      <div class="cta-row">
+        <a onclick="showPage('docs')" class="btn-dark">Connect Agent →</a>
+        <a onclick="showPage('agents')" class="btn-outline">Agent Status</a>
+      </div>
+    </div>
+
+    <!-- Price ticker -->
+    <div class="price-ticker">
+      <div class="price-chip"><div class="price-sym">BTC / USD</div><div class="price-val" id="btc-price">—</div><div class="price-live">Live price</div></div>
+      <div class="price-chip"><div class="price-sym">ETH / USD</div><div class="price-val" id="eth-price">—</div><div class="price-live">Live price</div></div>
+      <div class="price-chip"><div class="price-sym">SOL / USD</div><div class="price-val" id="sol-price">—</div><div class="price-live">Live price</div></div>
+      <div class="price-chip"><div class="price-sym">OKB / USD</div><div class="price-val" id="okb-price">—</div><div class="price-live">Live price</div></div>
+    </div>
+
+    <!-- Broker stats -->
+    <div class="broker-stats">
+      <div class="broker-stat"><div class="bstat-label">Total Trades</div><div class="bstat-val amber" id="stat-trades">0</div></div>
+      <div class="broker-stat"><div class="bstat-label">Win Rate</div><div class="bstat-val green" id="stat-winrate">—</div></div>
+      <div class="broker-stat"><div class="bstat-label">Total PnL</div><div class="bstat-val" id="stat-pnl">$0.00</div></div>
+      <div class="broker-stat"><div class="bstat-label">Best Sharpe</div><div class="bstat-val amber" id="stat-sharpe">—</div></div>
+      <div class="broker-stat"><div class="bstat-label">Portfolio</div><div class="bstat-val" id="stat-portfolio">$0.00</div></div>
+      <div class="broker-stat"><div class="bstat-label">Agent Earnings</div><div class="bstat-val green" id="stat-earnings">$0.00</div></div>
+    </div>
+
+    <!-- Agent earning chips -->
+    <div class="agent-grid-broker">
+      <div class="agent-chip"><div class="agent-chip-num">AGENT 01</div><div class="agent-chip-name">Scout Agent</div><div class="agent-chip-earn" id="scout-earn">$0.000000</div><div class="agent-chip-badge">60% of signal fee</div></div>
+      <div class="agent-chip"><div class="agent-chip-num">AGENT 02</div><div class="agent-chip-name">Risk Agent</div><div class="agent-chip-earn" id="risk-earn">$0.000000</div><div class="agent-chip-badge">30% of execution fee</div></div>
+      <div class="agent-chip"><div class="agent-chip-num">AGENT 03</div><div class="agent-chip-name">Learning Agent</div><div class="agent-chip-earn" id="learning-earn">$0.000000</div><div class="agent-chip-badge">25% of full broker fee</div></div>
+      <div class="agent-chip"><div class="agent-chip-num">AGENT 04</div><div class="agent-chip-name">Execution Agent</div><div class="agent-chip-earn" id="execution-earn">$0.000000</div><div class="agent-chip-badge">40% of execution fee</div></div>
+    </div>
+
+    <!-- Strategy leaderboard -->
+    <div class="tbl-wrap">
+      <div class="tbl-title">Strategy Competition <span style="font-weight:400;font-size:0.72rem">Sharpe-weighted capital allocation</span></div>
+      <div class="tbl-header lb-grid"><div>#</div><div>Strategy</div><div>Win Rate</div><div>Sharpe</div><div>PnL</div><div>Allocation</div></div>
+      <div id="lb-rows">
+        <div class="tbl-row lb-grid"><div class="lb-rank">1</div><div class="lb-strat">Aggressive</div><div>—</div><div>—</div><div>—</div><div><div>33.3%</div><div class="alloc-bar"><div class="alloc-fill" style="width:33%"></div></div></div></div>
+        <div class="tbl-row lb-grid"><div class="lb-rank">2</div><div class="lb-strat">Balanced</div><div>—</div><div>—</div><div>—</div><div><div>33.3%</div><div class="alloc-bar"><div class="alloc-fill" style="width:33%"></div></div></div></div>
+        <div class="tbl-row lb-grid"><div class="lb-rank">3</div><div class="lb-strat">Conservative</div><div>—</div><div>—</div><div>—</div><div><div>33.4%</div><div class="alloc-bar"><div class="alloc-fill" style="width:34%"></div></div></div></div>
+      </div>
+    </div>
+
+    <!-- Live trade feed -->
+    <div class="tbl-wrap">
+      <div class="tbl-title">Live Trade Feed <span style="font-weight:400;font-size:0.72rem">Real Uniswap V3 swaps on X Layer</span></div>
+      <div class="tbl-header feed-grid"><div>Asset</div><div>Agent</div><div>Status</div><div>Explorer</div><div>Time</div></div>
+      <div id="trade-feed"><div class="empty-row">Waiting for trades...</div></div>
+    </div>
+
+    <!-- How it works -->
+    <div style="margin-bottom:1.5rem">
+      <div class="broker-label" style="margin-bottom:0.75rem">Architecture</div>
+      <div class="flow-grid">
+        <div class="flow-step"><div class="flow-num">01</div><h3>Agent pays x402</h3><p>Send USDT0 to broker wallet on X Layer. No accounts needed.</p><div class="flow-tag">X LAYER · CHAIN ID 196</div></div>
+        <div class="flow-step"><div class="flow-num">02</div><h3>Scout generates signal</h3><p>RSI, VWAP, BB, momentum, order book across any asset.</p><div class="flow-tag">CRYPTOCOMPARE · KRAKEN</div></div>
+        <div class="flow-step"><div class="flow-num">03</div><h3>Risk validates</h3><p>Kelly Criterion sizing, portfolio heat, dynamic SL/TP.</p><div class="flow-tag">KELLY CRITERION</div></div>
+        <div class="flow-step"><div class="flow-num">04</div><h3>Learning approves</h3><p>Online ML model retrains after every trade outcome.</p><div class="flow-tag">SGDCLASSIFIER · AUTO-RETRAIN</div></div>
+        <div class="flow-step"><div class="flow-num">05</div><h3>Uniswap V3 swap</h3><p>Real on-chain swap. Returns tx hash + OKLink link.</p><div class="flow-tag">UNISWAP V3 · OKLINK</div></div>
+        <div class="flow-step"><div class="flow-num">06</div><h3>Fee split onchain</h3><p>Each agent earns automatically. Agent economy loop.</p><div class="flow-tag">x402 SPLITS · TRANSPARENT</div></div>
+      </div>
+    </div>
+
+    <!-- Quick connect -->
+    <div class="notice">⬡ Broker wallet: 0xdec754869Aa921661676e5FfB8589556cBDF3Ec7 · Chain ID: 196 · Token: USDT0</div>
+    <div class="code-block">
+<span class="cm"># Any AI agent</span>
+tx_hash = send_usdt0(<span class="str">"0xdec754869Aa921661676e5FfB8589556cBDF3Ec7"</span>, <span class="str">0.02</span>)
+res = requests.post(<span class="str">"https://alphaloop.duckdns.org/broker"</span>, json={<span class="str">"asset"</span>:<span class="str">"ETH"</span>,<span class="str">"agent_id"</span>:<span class="str">"my-agent"</span>,<span class="str">"tx_hash"</span>:tx_hash})
+<span class="cm"># {"status":"success","tx_hash":"0x...","explorer":"https://oklink.com/..."}</span>
+    </div>
+    <br>
+    <a onclick="showPage('docs')" class="btn-dark">View Full API Docs →</a>
+
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+<footer>
+  <div class="footer-logo">Alpha<span>Loop</span></div>
+  <ul class="footer-links">
+    <li><a onclick="showPage('docs')">API Docs</a></li>
+    <li><a onclick="showPage('agents')">Agent Status</a></li>
+    <li><a href="https://github.com/davieslennox0/xlayer-signal-api" target="_blank">GitHub</a></li>
+    <li><a href="https://www.moltbook.com/u/alphaloop" target="_blank">Moltbook</a></li>
+  </ul>
+  <div class="footer-meta">Built on X Layer · x402 · OKX Build X S2</div>
+</footer>
+</div>
+
+<!-- ═══════ DOCS PAGE ═══════ -->
+<div id="page-docs" class="page">
+<div class="broker-inner" style="padding-top:2rem">
+  <div class="broker-label">API Reference</div>
+  <div class="broker-title" style="margin-bottom:0.75rem">AlphaLoop API Docs</div>
+  <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1.5rem">Base URL: <code style="font-family:var(--mono);background:var(--surface2);padding:0.1rem 0.4rem;border-radius:4px">https://alphaloop.duckdns.org</code></p>
+  <div class="notice">⬡ Broker wallet: 0xdec754869Aa921661676e5FfB8589556cBDF3Ec7 · Send payment → get tx_hash → include in request body</div>
+
+  <div class="endpoint-block"><div class="endpoint-header"><span class="api-method get-b">GET</span><span style="font-family:var(--mono);font-weight:600">/preview/{asset}</span><span style="margin-left:auto;color:var(--green);font-size:0.75rem;font-weight:700">FREE</span></div><div class="endpoint-body"><p>Live price and confidence for any crypto. Direction locked behind payment.</p></div></div>
+  <div class="endpoint-block"><div class="endpoint-header"><span class="api-method post-b">POST</span><span style="font-family:var(--mono);font-weight:600">/signal</span><span style="margin-left:auto;color:var(--amber-dark);font-size:0.75rem;font-weight:700">$0.01 USDT0</span></div><div class="endpoint-body"><p>Full directional signal. Returns direction, RSI, momentum, VWAP, tradeable flag.</p><table class="param-table"><tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr><tr><td class="param-name">asset</td><td>string</td><td class="param-req">yes</td><td>Crypto ticker e.g. BTC, ETH</td></tr><tr><td class="param-name">tx_hash</td><td>string</td><td class="param-req">yes</td><td>Payment tx hash</td></tr></table></div></div>
+  <div class="endpoint-block"><div class="endpoint-header"><span class="api-method post-b">POST</span><span style="font-family:var(--mono);font-weight:600">/validate</span><span style="margin-left:auto;color:var(--amber-dark);font-size:0.75rem;font-weight:700">$0.02 USDT0</span></div><div class="endpoint-body"><p>Submit your signal for Risk Agent validation. Returns position size, SL/TP.</p></div></div>
+  <div class="endpoint-block"><div class="endpoint-header"><span class="api-method post-b">POST</span><span style="font-family:var(--mono);font-weight:600">/execute</span><span style="margin-left:auto;color:var(--amber-dark);font-size:0.75rem;font-weight:700">$0.05 USDT0</span></div><div class="endpoint-body"><p>Risk + Learning + Uniswap V3 execution. Returns on-chain tx hash.</p></div></div>
+  <div class="endpoint-block"><div class="endpoint-header"><span class="api-method post-b">POST</span><span style="font-family:var(--mono);font-weight:600">/broker</span><span style="margin-left:auto;color:var(--amber-dark);font-size:0.75rem;font-weight:700">$0.02 USDT0</span></div><div class="endpoint-body"><p>Full pipeline. Scout → Risk → Learning → Uniswap. Maximum automation.</p></div></div>
+  <div class="endpoint-block"><div class="endpoint-header"><span class="api-method post-b">POST</span><span style="font-family:var(--mono);font-weight:600">/scout/signal</span><span style="margin-left:auto;color:var(--blue);font-size:0.75rem;font-weight:700">$0.001 USDC</span></div><div class="endpoint-body"><p>Scout Intelligence — news-matched Polymarket signal. Groq AI analysis.</p><table class="param-table"><tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr><tr><td class="param-name">market</td><td>string</td><td class="param-req">yes</td><td>e.g. "BTC-5m", "crypto"</td></tr><tr><td class="param-name">query</td><td>string</td><td class="param-req">yes</td><td>e.g. "bitcoin price"</td></tr></table></div></div>
+  <div class="endpoint-block"><div class="endpoint-header"><span class="api-method get-b">GET</span><span style="font-family:var(--mono);font-weight:600">/scout/markets?keyword=bitcoin</span><span style="margin-left:auto;color:var(--green);font-size:0.75rem;font-weight:700">FREE</span></div><div class="endpoint-body"><p>Discover active Polymarket markets for any keyword.</p></div></div>
+  <div class="endpoint-block"><div class="endpoint-header"><span class="api-method get-b">GET</span><span style="font-family:var(--mono);font-weight:600">/.well-known/mcp.json</span><span style="margin-left:auto;color:var(--green);font-size:0.75rem;font-weight:700">FREE</span></div><div class="endpoint-body"><p>MCP manifest with 8 tools for Claude and MCP-compatible agents.</p></div></div>
+
+  <div class="code-block" style="margin-top:1.5rem">
+<span class="cm"># Full broker + Scout Intelligence</span>
+tx = send_usdt0(<span class="str">"0xdec754...Ec7"</span>, <span class="str">0.02</span>)
+res = requests.post(<span class="str">"https://alphaloop.duckdns.org/broker"</span>, json={<span class="str">"asset"</span>:<span class="str">"ETH"</span>,<span class="str">"agent_id"</span>:<span class="str">"agent-001"</span>,<span class="str">"tx_hash"</span>:tx})
+
+scout = requests.post(<span class="str">"https://alphaloop.duckdns.org/scout/signal"</span>, json={<span class="str">"market"</span>:<span class="str">"BTC-5m"</span>,<span class="str">"query"</span>:<span class="str">"bitcoin price"</span>})
+<span class="cm"># {"signal":"BULLISH","confidence":74,"polymarket_url":"https://..."}</span>
+  </div>
+</div>
+<div class="sec-divider"></div>
+<footer>
+  <div class="footer-logo">Alpha<span>Loop</span></div>
+  <ul class="footer-links"><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('agents')">Agent Status</a></li><li><a href="https://github.com/davieslennox0/xlayer-signal-api" target="_blank">GitHub</a></li></ul>
+  <div class="footer-meta">Built on X Layer · x402 · OKX Build X S2</div>
+</footer>
+</div>
+
+<!-- ═══════ AGENTS PAGE ═══════ -->
+<div id="page-agents" class="page">
+<div class="broker-inner" style="padding-top:2rem">
+  <div class="broker-label">Live Agent Network</div>
+  <div class="broker-title" style="margin-bottom:0.5rem">Agent Status</div>
+  <p style="color:var(--muted);font-size:0.85rem;margin-bottom:2rem">Five autonomous agents on X Layer mainnet. Each earns a share of every x402 fee.</p>
+
+  <div class="agent-live-grid">
+    <div class="agent-live-card"><div class="agent-live-info"><h3>Scout Agent</h3><p>Signal generation · Any crypto asset</p></div><div class="agent-live-stat"><div class="agent-live-val" id="al-scout-earn">$0.000000</div><div class="agent-live-label">Total Earned</div></div><div><span class="status-active">● Active</span></div></div>
+    <div class="agent-live-card"><div class="agent-live-info"><h3>Risk Agent</h3><p>Kelly Criterion · Portfolio heat · SL/TP</p></div><div class="agent-live-stat"><div class="agent-live-val" id="al-risk-earn">$0.000000</div><div class="agent-live-label">Total Earned</div></div><div><span class="status-active">● Active</span></div></div>
+    <div class="agent-live-card"><div class="agent-live-info"><h3>Learning Agent</h3><p>Online ML · SGDClassifier · Auto-retrain</p></div><div class="agent-live-stat"><div class="agent-live-val" id="al-learning-earn">$0.000000</div><div class="agent-live-label">Total Earned</div></div><div><span class="status-active">● Active</span></div></div>
+    <div class="agent-live-card"><div class="agent-live-info"><h3>Execution Agent</h3><p>Uniswap V3 · X Layer · OKLink verified</p></div><div class="agent-live-stat"><div class="agent-live-val" id="al-execution-earn">$0.000000</div><div class="agent-live-label">Total Earned</div></div><div><span class="status-active">● Active</span></div></div>
+    <div class="agent-live-card" style="border-color:var(--blue)"><div class="agent-live-info"><h3>Scout Intelligence</h3><p>News fetch · Groq AI · Polymarket signals</p></div><div class="agent-live-stat"><div class="agent-live-val" style="color:var(--blue)">$0.001/req</div><div class="agent-live-label">Per Signal</div></div><div><span class="status-active" style="background:var(--blue-light);color:var(--blue)">● Active</span></div></div>
+  </div>
+
+  <div style="margin-top:1.5rem">
+    <div class="notice">⬡ Broker: 0xdec754869Aa921661676e5FfB8589556cBDF3Ec7 · AgentRegistry: 0x047445Bf2CC338D635324B8Fe286Dcc74c642789 · X Layer (196)</div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:1rem">
+    <div class="tbl-title">Strategy Leaderboard</div>
+    <div class="tbl-header lb-grid"><div>#</div><div>Strategy</div><div>Win Rate</div><div>Sharpe</div><div>PnL</div><div>Allocation</div></div>
+    <div id="al-lb-rows">
+      <div class="tbl-row lb-grid"><div class="lb-rank">1</div><div class="lb-strat">Aggressive</div><div>—</div><div>—</div><div>—</div><div><div>33.3%</div><div class="alloc-bar"><div class="alloc-fill" style="width:33%"></div></div></div></div>
+      <div class="tbl-row lb-grid"><div class="lb-rank">2</div><div class="lb-strat">Balanced</div><div>—</div><div>—</div><div>—</div><div><div>33.3%</div><div class="alloc-bar"><div class="alloc-fill" style="width:33%"></div></div></div></div>
+      <div class="tbl-row lb-grid"><div class="lb-rank">3</div><div class="lb-strat">Conservative</div><div>—</div><div>—</div><div>—</div><div><div>33.4%</div><div class="alloc-bar"><div class="alloc-fill" style="width:34%"></div></div></div></div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:1rem">
+    <div class="tbl-title">Live Trade Feed</div>
+    <div class="tbl-header feed-grid"><div>Asset</div><div>Agent</div><div>Status</div><div>Explorer</div><div>Time</div></div>
+    <div id="al-trade-feed"><div class="empty-row">Loading trades...</div></div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:1rem">
+    <div class="tbl-title">Scout Intelligence Feed</div>
+    <div class="tbl-header" style="display:grid;grid-template-columns:3.5rem 4rem 1fr 7rem;gap:0.75rem"><div>Agent</div><div>Signal</div><div>Analysis</div><div>Market</div></div>
+    <div id="al-scout-rows"><div class="empty-row">Loading signals...</div></div>
+  </div>
+</div>
+<div class="sec-divider"></div>
+<footer>
+  <div class="footer-logo">Alpha<span>Loop</span></div>
+  <ul class="footer-links"><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('docs')">API Docs</a></li><li><a href="https://github.com/davieslennox0/xlayer-signal-api" target="_blank">GitHub</a></li><li><a href="https://www.moltbook.com/u/alphaloop" target="_blank">Moltbook</a></li></ul>
+  <div class="footer-meta">Built on X Layer · x402 · OKX Build X S2</div>
+</footer>
+</div>
+
+<script>
+const API="https://alphaloop.duckdns.org";
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));const el=document.getElementById('nav-'+n);if(el)el.classList.add('active');window.scrollTo(0,0);}
+function scrollTo(id){setTimeout(()=>{const el=document.querySelector(id);if(el)el.scrollIntoView({behavior:'smooth'});},100);}
+function fmt(n,d=2){return Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
+
+async function fetchPrice(asset,id){
+  try{const r=await fetch(`https://min-api.cryptocompare.com/data/price?fsym=${asset}&tsyms=USD`);const d=await r.json();if(d.USD)document.getElementById(id).textContent='$'+fmt(d.USD);}catch(e){}
+}
+
+async function fetchStatus(){
+  try{
+    const r=await fetch(`${API}/status`);const d=await r.json();
+    const perf=d.performance||{};
+    document.getElementById('stat-trades').textContent=perf.trades||0;
+    document.getElementById('stat-winrate').textContent=perf.win_rate?perf.win_rate+'%':'—';
+    const pnl=perf.total_pnl_usdt||0;
+    const pe=document.getElementById('stat-pnl');pe.textContent='$'+fmt(Math.abs(pnl));pe.className='bstat-val '+(pnl>=0?'green':'red');
+    document.getElementById('stat-portfolio').textContent='$'+fmt(d.portfolio_value_usdt||0);
+    const earn=d.agent_earnings||{};
+    const total=Object.values(earn).reduce((a,b)=>a+b,0);
+    document.getElementById('stat-earnings').textContent='$'+fmt(total);
+    document.getElementById('stat-sharpe').textContent=d.leaderboard?.[0]?.sharpe||'—';
+    ['scout','risk','learning','execution'].forEach(a=>{
+      const v='$'+(earn[a]||0).toFixed(6);
+      ['','al-'].forEach(p=>{const el=document.getElementById(p+a+'-earn');if(el)el.textContent=v;});
+    });
+    const board=d.leaderboard||[];
+    if(board.length){
+      const h=board.map((s,i)=>`<div class="tbl-row lb-grid"><div class="lb-rank">${i+1}</div><div class="lb-strat">${s.strategy}</div><div>${s.win_rate?s.win_rate+'%':'—'}</div><div>${s.sharpe||'—'}</div><div class="${(s.total_pnl||0)>=0?'':'red'}">${s.total_pnl?'$'+fmt(s.total_pnl):'—'}</div><div><div>${s.allocation}%</div><div class="alloc-bar"><div class="alloc-fill" style="width:${s.allocation}%"></div></div></div></div>`).join('');
+      document.getElementById('lb-rows').innerHTML=h;
+      document.getElementById('al-lb-rows').innerHTML=h;
+    }
+  }catch(e){}
+}
+
+async function fetchActivity(){
+  try{
+    const r=await fetch(`${API}/activity`);const d=await r.json();
+    const items=(d.activity||[]).slice().reverse();
+    if(!items.length)return;
+    const h=items.map(t=>{
+      const time=new Date(t.timestamp*1000).toLocaleTimeString();
+      const exp=t.tx_hash?`<div class="feed-tx"><a href="https://www.oklink.com/xlayer/tx/${t.tx_hash}" target="_blank">↗ View</a></div>`:'<div>—</div>';
+      const st=t.status==='success'?'<span class="badge-ok">Success</span>':'<span class="badge-wait">Waiting</span>';
+      return `<div class="tbl-row feed-grid"><div class="feed-asset">${t.asset||'—'}</div><div class="feed-agent">${t.agent_id||'—'}</div><div>${st}</div>${exp}<div class="feed-time">${time}</div></div>`;
+    }).join('');
+    document.getElementById('trade-feed').innerHTML=h;
+    document.getElementById('al-trade-feed').innerHTML=h;
+  }catch(e){}
+}
+
+async function fetchScoutFeed(){
+  try{
+    const r=await fetch(`${API}/scout/feed`);const d=await r.json();
+    const items=(d.feed||[]).slice().reverse();
+    if(!items.length)return;
+
+    // Update latest signal card
+    const latest=items[0];
+    const sig=latest.signal||'—';
+    const sigEl=document.getElementById('scout-latest-signal');
+    sigEl.textContent=sig;
+    sigEl.className='signal-big '+(sig==='BULLISH'?'signal-bull':sig==='BEARISH'?'signal-bear':'signal-neu');
+    document.getElementById('scout-latest-conf').textContent=`Confidence: ${latest.confidence||0}%`;
+    document.getElementById('scout-latest-agent').textContent=`Agent: ${latest.agent_id||'—'}`;
+    document.getElementById('scout-latest-reason').textContent=latest.reasoning||'—';
+
+    // Best market card
+    if(latest.best_market){
+      document.getElementById('scout-best-market').textContent=latest.best_market;
+      const pm=latest.polymarket_markets?.[0];
+      if(pm){
+        document.getElementById('scout-yes-price').textContent=pm.yes_price||'—';
+        document.getElementById('scout-no-price').textContent=pm.no_price||'—';
+        document.getElementById('scout-vol').textContent=`Volume: $${pm.volume?fmt(parseFloat(pm.volume),0):'—'}`;
+        document.getElementById('scout-market-link').innerHTML=`<a href="${pm.url}" target="_blank">View on Polymarket ↗</a>`;
+      }
+    }
+
+    // News chips
+    const news=(latest.news||[]).filter(n=>n&&n.length>10&&!n.includes('Yahoo! Finance:  News'));
+    if(news.length){
+      document.getElementById('scout-news-strip').innerHTML=news.map(n=>`<div class="news-chip"><div class="news-chip-label">📰 Source</div>${n}</div>`).join('');
+    }
+
+    // Feed table
+    const sigClass=s=>s==='BULLISH'?'sf-signal-bull':s==='BEARISH'?'sf-signal-bear':'sf-signal-neu';
+    const h=items.slice(0,8).map(t=>{
+      const mkt=t.polymarket_url&&t.best_market?`<div class="sf-market"><a href="${t.polymarket_url}" target="_blank">${(t.best_market||'').slice(0,40)}... ↗</a></div>`:'<div>—</div>';
+      return `<div class="scout-feed-row"><div class="sf-agent">${t.agent_id||'—'}</div><div class="${sigClass(t.signal)}">${t.signal||'—'} <span style="color:#8B949E;font-size:0.68rem;font-weight:400">${t.confidence||0}%</span></div><div class="sf-reason">${(t.reasoning||'').slice(0,90)}...</div>${mkt}</div>`;
+    }).join('');
+    document.getElementById('scout-feed-rows').innerHTML=h;
+    if(document.getElementById('al-scout-rows'))document.getElementById('al-scout-rows').innerHTML=h.replace(/scout-feed-row/g,'tbl-row').replace(/sf-agent/g,'').replace(/sf-reason/g,'');
+  }catch(e){}
+}
+
+// Init
+fetchPrice('BTC','btc-price');fetchPrice('ETH','eth-price');fetchPrice('SOL','sol-price');fetchPrice('OKB','okb-price');
+fetchStatus();fetchActivity();fetchScoutFeed();
+
+setInterval(()=>{
+  fetchPrice('BTC','btc-price');fetchPrice('ETH','eth-price');fetchPrice('SOL','sol-price');fetchPrice('OKB','okb-price');
+  fetchStatus();fetchActivity();fetchScoutFeed();
+},30000);
+</script>
+</body>
+</html>

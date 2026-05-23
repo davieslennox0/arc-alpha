@@ -1,0 +1,18 @@
+nohup: ignoring input
+/root/arc-alpha/prime_broker.py:415: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Started server process [3778640]
+INFO:     Waiting for application startup.
+2026-05-23 13:38:42,613 [Monitor] Trade monitor started as background thread
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
+2026-05-23 13:38:42,639 [Monitor] Monitor error: Extra data: line 27360 column 4 (char 697135)
+INFO:     127.0.0.1:42598 - "GET /status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53380 - "GET /preview/BTC HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42514 - "GET /signal?asset=BTC&tx=3944440df3de5b68e5804b33c1d80a8cde7a94280b5d68de7c3e166469181b41 HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:39884 - "POST /signal HTTP/1.1" 200 OK
