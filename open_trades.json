@@ -40,5 +40,33 @@
       "asset": "EURUSD"
     },
     "opened_at": 1779548788
+  },
+  "0a4ec29d575bf7d754043fc6ed0930b8ef7dd91195ee424f31f99fa2498bcad2": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779549081
+  },
+  "d1fbc681e6ffc260f58535efb445dbf900c150018e5ef860dce363fcf75a534b": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779549146
   }
 }
