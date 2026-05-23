@@ -5,3 +5,57 @@
 2026-05-23 13:36:44,985 [Monitor] Monitor error: Extra data: line 27360 column 4 (char 697135)
 2026-05-23 13:38:42,613 [Monitor] Trade monitor started as background thread
 2026-05-23 13:38:42,639 [Monitor] Monitor error: Extra data: line 27360 column 4 (char 697135)
+2026-05-23 13:51:49,402 [Monitor] Retrying request to /openai/v1/chat/completions in 0.909916 seconds
+2026-05-23 13:51:50,339 [Monitor] Retrying request to /openai/v1/chat/completions in 1.579354 seconds
+2026-05-23 13:51:52,852 [Monitor] Retrying request to /openai/v1/chat/completions in 0.978246 seconds
+2026-05-23 13:51:53,847 [Monitor] Retrying request to /openai/v1/chat/completions in 1.661935 seconds
+2026-05-23 13:51:58,184 [Monitor] Retrying request to /openai/v1/chat/completions in 0.805432 seconds
+2026-05-23 13:51:59,005 [Monitor] Retrying request to /openai/v1/chat/completions in 1.671148 seconds
+2026-05-23 13:56:54,838 [Monitor] Retrying request to /openai/v1/chat/completions in 0.800484 seconds
+2026-05-23 13:56:55,656 [Monitor] Retrying request to /openai/v1/chat/completions in 1.989363 seconds
+2026-05-23 13:56:57,459 [Monitor] Retrying request to /openai/v1/chat/completions in 0.940384 seconds
+2026-05-23 13:56:58,414 [Monitor] Retrying request to /openai/v1/chat/completions in 1.707855 seconds
+2026-05-23 13:57:02,824 [Monitor] Retrying request to /openai/v1/chat/completions in 0.902690 seconds
+2026-05-23 13:57:03,741 [Monitor] Retrying request to /openai/v1/chat/completions in 1.819435 seconds
+2026-05-23 14:01:59,667 [Monitor] Retrying request to /openai/v1/chat/completions in 0.931529 seconds
+2026-05-23 14:02:00,615 [Monitor] Retrying request to /openai/v1/chat/completions in 1.692041 seconds
+2026-05-23 14:02:01,968 [Monitor] Retrying request to /openai/v1/chat/completions in 0.805321 seconds
+2026-05-23 14:02:02,791 [Monitor] Retrying request to /openai/v1/chat/completions in 1.705525 seconds
+2026-05-23 14:02:07,204 [Monitor] Retrying request to /openai/v1/chat/completions in 0.817676 seconds
+2026-05-23 14:02:08,039 [Monitor] Retrying request to /openai/v1/chat/completions in 1.699937 seconds
+2026-05-23 14:07:04,181 [Monitor] Retrying request to /openai/v1/chat/completions in 0.938795 seconds
+2026-05-23 14:07:05,134 [Monitor] Retrying request to /openai/v1/chat/completions in 1.871477 seconds
+2026-05-23 14:07:06,404 [Monitor] Retrying request to /openai/v1/chat/completions in 0.900999 seconds
+2026-05-23 14:07:07,319 [Monitor] Retrying request to /openai/v1/chat/completions in 1.518268 seconds
+2026-05-23 14:07:11,888 [Monitor] Retrying request to /openai/v1/chat/completions in 0.996799 seconds
+2026-05-23 14:07:12,900 [Monitor] Retrying request to /openai/v1/chat/completions in 1.578582 seconds
+2026-05-23 14:12:08,838 [Monitor] Retrying request to /openai/v1/chat/completions in 0.941574 seconds
+2026-05-23 14:12:09,794 [Monitor] Retrying request to /openai/v1/chat/completions in 1.529599 seconds
+2026-05-23 14:12:10,782 [Monitor] Retrying request to /openai/v1/chat/completions in 0.778748 seconds
+2026-05-23 14:12:11,576 [Monitor] Retrying request to /openai/v1/chat/completions in 1.682964 seconds
+2026-05-23 14:12:16,567 [Monitor] Retrying request to /openai/v1/chat/completions in 0.899162 seconds
+2026-05-23 14:12:17,482 [Monitor] Retrying request to /openai/v1/chat/completions in 1.857221 seconds
+2026-05-23 14:13:06,311 [Monitor] Trade monitor started as background thread
+2026-05-23 14:15:11,113 [Monitor] Retrying request to /openai/v1/chat/completions in 0.783470 seconds
+2026-05-23 14:15:11,913 [Monitor] Retrying request to /openai/v1/chat/completions in 1.558138 seconds
+2026-05-23 14:15:16,052 [Monitor] Retrying request to /openai/v1/chat/completions in 0.889048 seconds
+2026-05-23 14:15:16,955 [Monitor] Retrying request to /openai/v1/chat/completions in 1.760652 seconds
+2026-05-23 14:15:21,075 [Monitor] Retrying request to /openai/v1/chat/completions in 0.974064 seconds
+2026-05-23 14:15:22,067 [Monitor] Retrying request to /openai/v1/chat/completions in 1.947069 seconds
+2026-05-23 14:17:10,533 [Monitor] Trade monitor started as background thread
+2026-05-23 14:17:14,840 [Monitor] Retrying request to /openai/v1/chat/completions in 0.803005 seconds
+2026-05-23 14:17:15,659 [Monitor] Retrying request to /openai/v1/chat/completions in 1.571161 seconds
+2026-05-23 14:17:20,291 [Monitor] Retrying request to /openai/v1/chat/completions in 0.810131 seconds
+2026-05-23 14:17:21,116 [Monitor] Retrying request to /openai/v1/chat/completions in 1.558966 seconds
+2026-05-23 14:18:27,139 [Monitor] Trade monitor started as background thread
+2026-05-23 14:18:31,982 [Monitor] Retrying request to /openai/v1/chat/completions in 0.830302 seconds
+2026-05-23 14:18:32,827 [Monitor] Retrying request to /openai/v1/chat/completions in 1.507840 seconds
+2026-05-23 14:18:36,567 [Monitor] Retrying request to /openai/v1/chat/completions in 0.857859 seconds
+2026-05-23 14:18:37,439 [Monitor] Retrying request to /openai/v1/chat/completions in 1.556838 seconds
+2026-05-23 14:32:58,497 [Monitor] Trade monitor started as background thread
+2026-05-23 14:38:47,188 [Monitor] Trade monitor started as background thread
+2026-05-23 14:52:44,186 [Monitor] Trade monitor started as background thread
+2026-05-23 15:06:14,591 [Monitor] Trade monitor started as background thread
+2026-05-23 15:06:18,125 [Monitor] Registered open trade: 9d12c59bb67f... EURUSD UP @ $0
+2026-05-23 15:06:22,942 [Monitor] Registered open trade: 128122aa2255... EURUSD UP @ $0
+2026-05-23 15:06:28,151 [Monitor] Registered open trade: 497b887a1640... EURUSD UP @ $0

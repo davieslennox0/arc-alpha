@@ -14,7 +14,7 @@ from trade_monitor import register_trade
 from risk_agent import assess_risk, get_portfolio_value
 from learning_agent import should_trade, record_outcome, get_performance_stats
 from competition_layer import select_strategy, record_strategy_trade, get_leaderboard
-from execution_agent import execute_swap
+from execution_agent import execute_fx_trade
 
 load_dotenv()
 
@@ -40,6 +40,7 @@ app.add_middleware(
 
 w3 = Web3(Web3.HTTPProvider(os.getenv("RPC_URL")))
 BROKER_WALLET = Web3.to_checksum_address(os.getenv("WALLET_ADDRESS"))
+PRIVATE_KEY = os.getenv("PRIVATE_KEY")
 CHAIN_ID = int(os.getenv("CHAIN_ID", 5042002))
 USDC = Web3.to_checksum_address("0x3600000000000000000000000000000000000000")
 
@@ -109,10 +110,12 @@ def verify_x402_payment(tx_hash: str, expected_usdt: float) -> bool:
     """Verify that tx_hash is a valid confirmed tx on Arc."""
     import time
     try:
+        if not tx_hash.startswith("0x"):
+            tx_hash = "0x" + tx_hash
         for _ in range(15):
             try:
                 receipt = w3.eth.get_transaction_receipt(tx_hash)
-                if receipt and receipt["status"] == 1:
+                if receipt is not None and receipt.get("status") == 1:
                     return True
             except Exception:
                 pass
@@ -139,6 +142,13 @@ class ValidateRequest(BaseModel):
     direction: str
     confidence: float
     tx_hash: str
+
+# Agent registry — maps agent_id to wallet/key for FX execution
+AGENT_REGISTRY = {
+    "alice":   {"wallet": os.getenv("AGENT_ALICE_ADDRESS"),   "key": os.getenv("AGENT_ALICE_KEY")},
+    "bob":     {"wallet": os.getenv("AGENT_BOB_ADDRESS"),     "key": os.getenv("AGENT_BOB_KEY")},
+    "charlie": {"wallet": os.getenv("AGENT_CHARLIE_ADDRESS"), "key": os.getenv("AGENT_CHARLIE_KEY")},
+}
 
 class ExecuteRequest(BaseModel):
     asset: str
@@ -202,7 +212,8 @@ def preview(asset: str):
 def get_signal(req: SignalRequest):
     """$0.01 — Scout + Risk Agent signal for requested asset."""
     if not verify_x402_payment(req.tx_hash, FEE_TIERS["signal"]["price_usdt"]):
-        raise HTTPException(status_code=402, detail={
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=402, content={
             "error": "Payment required",
             "amount": "0.01 USDC",
             "to": BROKER_WALLET,
@@ -237,7 +248,8 @@ def get_signal(req: SignalRequest):
 def validate(req: ValidateRequest):
     """$0.02 — Risk Agent validates an external agent's own signal."""
     if not verify_x402_payment(req.tx_hash, FEE_TIERS["validate"]["price_usdt"]):
-        raise HTTPException(status_code=402, detail={
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=402, content={
             "error": "Payment required",
             "amount": "0.02 USDC",
             "to": BROKER_WALLET,
@@ -272,7 +284,8 @@ def validate(req: ValidateRequest):
 def execute(req: ExecuteRequest):
     """$0.05 — Risk + Learning + Uniswap execution on Arc."""
     if not verify_x402_payment(req.tx_hash, FEE_TIERS["execute"]["price_usdt"]):
-        raise HTTPException(status_code=402, detail={
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=402, content={
             "error": "Payment required",
             "amount": "0.05 USDC",
             "to": BROKER_WALLET,
@@ -292,7 +305,8 @@ def execute(req: ExecuteRequest):
     size = min(req.amount_usdt, risk["position_size_usdt"])
 
     try:
-        result = execute_swap(asset, req.direction, size)
+        agent = AGENT_REGISTRY.get(req.agent_id.lower(), {})
+        result = execute_fx_trade(asset, req.direction, size, agent.get("wallet", BROKER_WALLET), agent.get("key", PRIVATE_KEY))
         record_agent_earnings("execute", FEE_TIERS["execute"]["price_usdt"])
         ACTIVITY_LOG.append({"agent_id": req.agent_id, "asset": asset, "status": result["status"], "tx_hash": result.get("tx_hash",""), "timestamp": int(__import__("time").time())})
         _save_activity(ACTIVITY_LOG)
@@ -334,7 +348,8 @@ def execute(req: ExecuteRequest):
 def full_broker(req: FullBrokerRequest):
     """$0.10 — Full pipeline: Scout → Risk → Learning → Uniswap execution."""
     if not verify_x402_payment(req.tx_hash, FEE_TIERS["full"]["price_usdt"]):
-        raise HTTPException(status_code=402, detail={
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=402, content={
             "error": "Payment required",
             "amount": "0.10 USDC",
             "to": BROKER_WALLET,
@@ -367,7 +382,8 @@ def full_broker(req: FullBrokerRequest):
     size = round(risk["position_size_usdt"] * size_mult, 4)
 
     try:
-        result = execute_swap(asset, sig.get("direction", "UP"), size)
+        agent = AGENT_REGISTRY.get(req.agent_id.lower(), {})
+        result = execute_fx_trade(asset, sig.get("direction", "UP"), size, agent.get("wallet", BROKER_WALLET), agent.get("key", PRIVATE_KEY))
         record_agent_earnings("full", FEE_TIERS["full"]["price_usdt"])
         ACTIVITY_LOG.append({"agent_id": req.agent_id, "asset": asset, "status": result["status"], "tx_hash": result.get("tx_hash",""), "timestamp": int(__import__("time").time())})
         _save_activity(ACTIVITY_LOG)

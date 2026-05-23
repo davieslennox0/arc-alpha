@@ -1,158 +1,136 @@
 import os
-import json
 import time
+import requests
 from dotenv import load_dotenv
 from web3 import Web3
 
-load_dotenv()
+load_dotenv('/root/arc-alpha/.env')
 
-for rpc in [os.getenv("RPC_URL"), "https://rpc.testnet.arc-node.thecanteenapp.com/v1/swrm_c05652a524a12054fafb7bfbe9c5377ca74495ac572e34f0270f296f9ad5cdcc", "https://rpc.testnet.arc.network"]:
+for rpc in [os.getenv("RPC_URL"), "https://rpc.testnet.arc.network"]:
     try:
         w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
         if w3.is_connected():
             break
     except Exception:
         continue
-WALLET = Web3.to_checksum_address(os.getenv("WALLET_ADDRESS"))
+
+WALLET      = Web3.to_checksum_address(os.getenv("WALLET_ADDRESS"))
 PRIVATE_KEY = os.getenv("PRIVATE_KEY")
-CHAIN_ID = int(os.getenv("CHAIN_ID", 5042002))
+CHAIN_ID    = int(os.getenv("CHAIN_ID", 5042002))
 
-# Arc token addresses
-USDC  = Web3.to_checksum_address("0x3600000000000000000000000000000000000000")
-WOKB   = Web3.to_checksum_address("0xe538905cf8410324e03A5A23C1c177a474D59b2b")
-WETH   = Web3.to_checksum_address("0x5A77f1443D16ee5761d310e38b62f77f726bC71c")
-
-# Uniswap V3 SwapRouter on Arc
-SWAP_ROUTER = Web3.to_checksum_address("0xE592427A0AEce92De3Edee1F18E0157C05861564")
-
-SWAP_ROUTER_ABI = [
-    {
-        "inputs": [{
-            "components": [
-                {"name": "tokenIn",        "type": "address"},
-                {"name": "tokenOut",       "type": "address"},
-                {"name": "fee",            "type": "uint24"},
-                {"name": "recipient",      "type": "address"},
-                {"name": "deadline",       "type": "uint256"},
-                {"name": "amountIn",       "type": "uint256"},
-                {"name": "amountOutMinimum","type": "uint256"},
-                {"name": "sqrtPriceLimitX96","type": "uint160"},
-            ],
-            "name": "params",
-            "type": "tuple"
-        }],
-        "name": "exactInputSingle",
-        "outputs": [{"name": "amountOut", "type": "uint256"}],
-        "stateMutability": "payable",
-        "type": "function"
-    }
-]
+# Arc native stablecoins
+USDC = Web3.to_checksum_address("0x3600000000000000000000000000000000000000")
+EURC = Web3.to_checksum_address("0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a")
 
 ERC20_ABI = [
-    {"inputs":[{"name":"spender","type":"address"},{"name":"amount","type":"uint256"}],
-     "name":"approve","outputs":[{"name":"","type":"bool"}],
+    {"inputs":[{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],
+     "name":"transfer","outputs":[{"name":"","type":"bool"}],
      "type":"function","stateMutability":"nonpayable"},
     {"inputs":[{"name":"account","type":"address"}],
      "name":"balanceOf","outputs":[{"name":"","type":"uint256"}],
      "type":"function","stateMutability":"view"},
-    {"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],
-     "name":"allowance","outputs":[{"name":"","type":"uint256"}],
-     "type":"function","stateMutability":"view"}
+    {"inputs":[{"name":"spender","type":"address"},{"name":"amount","type":"uint256"}],
+     "name":"approve","outputs":[{"name":"","type":"bool"}],
+     "type":"function","stateMutability":"nonpayable"},
 ]
 
-ASSET_TO_TOKEN = {
-    "BTC":  WOKB,   # proxy — no WBTC on Arc yet, use WOKB
-    "ETH":  WETH,
-    "OKB":  WOKB,
-}
+def get_eurusd_rate() -> float:
+    try:
+        r = requests.get("https://api.frankfurter.app/latest?from=EUR&to=USD", timeout=5)
+        return r.json()["rates"]["USD"]
+    except Exception:
+        return 1.08  # fallback
 
-def get_token_out(asset: str, direction: str) -> tuple:
-    """Returns (token_in, token_out) based on direction."""
-    token = ASSET_TO_TOKEN.get(asset, WOKB)
-    if direction.upper() == "UP":
-        return USDC, token   # buy token with USDC
-    else:
-        return token, USDC   # sell token for USDC
+def get_balance(token_addr: str, wallet: str) -> float:
+    token = w3.eth.contract(address=Web3.to_checksum_address(token_addr), abi=ERC20_ABI)
+    return token.functions.balanceOf(Web3.to_checksum_address(wallet)).call() / 1e6
 
-def approve_token(token_address: str, amount_wei: int) -> str | None:
-    token = w3.eth.contract(address=token_address, abi=ERC20_ABI)
-    allowance = token.functions.allowance(WALLET, SWAP_ROUTER).call()
-    if allowance >= amount_wei:
-        return None  # already approved
-
-    nonce = w3.eth.get_transaction_count(WALLET, "pending")
-    tx = token.functions.approve(SWAP_ROUTER, amount_wei).build_transaction({
-        "from": WALLET,
-        "nonce": nonce,
-        "gas": 100000,
-        "gasPrice": w3.eth.gas_price,
-        "chainId": CHAIN_ID,
-    })
-    signed = w3.eth.account.sign_transaction(tx, PRIVATE_KEY)
-    tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)
-    receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=60)
-    print(f"Approved: {tx_hash.hex()}")
-    return tx_hash.hex()
-
-def execute_swap(asset: str, direction: str, amount_usdt: float) -> dict:
-    token_in, token_out = get_token_out(asset, direction)
-
-    # USDC has 6 decimals, tokens have 18
-    if token_in == USDC:
-        amount_in_wei = int(amount_usdt * 1e6)
-    else:
-        # need to convert asset amount — use 18 decimals
-        amount_in_wei = int(amount_usdt * 1e18)
-
-    # Approve spend
-    approve_token(token_in, amount_in_wei)
-
-    router = w3.eth.contract(address=SWAP_ROUTER, abi=SWAP_ROUTER_ABI)
-    deadline = int(time.time()) + 300  # 5 min
-
-    params = {
-        "tokenIn":           token_in,
-        "tokenOut":          token_out,
-        "fee":               3000,      # 0.3% pool
-        "recipient":         WALLET,
-        "deadline":          deadline,
-        "amountIn":          amount_in_wei,
-        "amountOutMinimum":  0,         # Risk Agent handles slippage
-        "sqrtPriceLimitX96": 0,
-    }
-
-    nonce = w3.eth.get_transaction_count(WALLET, "pending")
-    tx = router.functions.exactInputSingle(params).build_transaction({
-        "from":     WALLET,
+def send_token(token_addr: str, to: str, amount: float, key: str, sender: str) -> str:
+    token = w3.eth.contract(address=Web3.to_checksum_address(token_addr), abi=ERC20_ABI)
+    amount_wei = int(amount * 1e6)
+    nonce = w3.eth.get_transaction_count(Web3.to_checksum_address(sender), "pending")
+    tx = token.functions.transfer(
+        Web3.to_checksum_address(to), amount_wei
+    ).build_transaction({
+        "from":     Web3.to_checksum_address(sender),
         "nonce":    nonce,
-        "gas":      300000,
+        "gas":      100000,
         "gasPrice": w3.eth.gas_price,
         "chainId":  CHAIN_ID,
-        "value":    0,
     })
-    signed = w3.eth.account.sign_transaction(tx, PRIVATE_KEY)
+    signed = w3.eth.account.sign_transaction(tx, key)
     tx_hash = w3.eth.send_raw_transaction(signed.raw_transaction)
-    receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=60)
+    w3.eth.wait_for_transaction_receipt(tx_hash, timeout=60)
+    return tx_hash.hex()
 
-    status = "success" if receipt["status"] == 1 else "failed"
-    return {
-        "status":     status,
-        "tx_hash":    tx_hash.hex(),
-        "asset":      asset,
-        "direction":  direction,
-        "amount_usdt": amount_usdt,
-        "block":      receipt["blockNumber"],
-        "gas_used":   receipt["gasUsed"],
-        "explorer":   f"https://www.testnet.arcscan.app/tx/{tx_hash.hex()}"
-    }
+def execute_fx_trade(asset: str, direction: str, amount_usdc: float,
+                     agent_wallet: str, agent_key: str) -> dict:
+    """
+    FX settlement on Arc testnet:
+    UP   → agent buys EURC with USDC  (long EUR/USD)
+    DOWN → agent sells EURC for USDC  (short EUR/USD)
+    """
+    rate = get_eurusd_rate()
+
+    if direction.upper() in ["UP", "BUY"]:
+        eurc_amount = round(amount_usdc / rate, 6)
+
+        # Agent sends USDC to broker
+        tx1 = send_token(USDC, WALLET, amount_usdc, agent_key, agent_wallet)
+        # Broker settles EURC to agent
+        tx2 = send_token(EURC, agent_wallet, eurc_amount, PRIVATE_KEY, WALLET)
+
+        return {
+            "status":        "success",
+            "type":          "FX_BUY",
+            "pair":          "EURC/USDC",
+            "rate":          rate,
+            "usdc_spent":    amount_usdc,
+            "eurc_received": eurc_amount,
+            "asset":         asset,
+            "direction":     direction,
+            "tx_hash":       tx2,
+            "tx_hash":       tx2,
+            "tx_payment":    tx1,
+            "tx_settlement": tx2,
+            "explorer":      f"https://testnet.arcscan.app/tx/0x{tx2}"
+        }
+
+    else:
+        eurc_amount = round(amount_usdc / rate, 6)
+        eurc_bal    = get_balance(EURC, agent_wallet)
+
+        # Use available EURC if below requested
+        if eurc_bal < eurc_amount:
+            eurc_amount = round(eurc_bal * 0.9, 6)
+
+        usdc_received = round(eurc_amount * rate, 6)
+
+        # Agent sends EURC to broker
+        tx1 = send_token(EURC, WALLET, eurc_amount, agent_key, agent_wallet)
+        # Broker settles USDC to agent
+        tx2 = send_token(USDC, agent_wallet, usdc_received, PRIVATE_KEY, WALLET)
+
+        return {
+            "status":        "success",
+            "type":          "FX_SELL",
+            "pair":          "EURC/USDC",
+            "rate":          rate,
+            "eurc_spent":    eurc_amount,
+            "usdc_received": usdc_received,
+            "asset":         asset,
+            "direction":     direction,
+            "tx_hash":       tx2,
+            "tx_hash":       tx2,
+            "tx_payment":    tx1,
+            "tx_settlement": tx2,
+            "explorer":      f"https://testnet.arcscan.app/tx/0x{tx2}"
+        }
 
 if __name__ == "__main__":
-    print(f"Connected: {w3.is_connected()}")
-    print(f"Wallet: {WALLET}")
-    okb_balance = w3.eth.get_balance(WALLET) / 1e18
-    print(f"OKB balance: {okb_balance:.6f}")
-
-    usdc = w3.eth.contract(address=USDC, abi=ERC20_ABI)
-    usdt_bal = usdc.functions.balanceOf(WALLET).call() / 1e6
-    print(f"USDC balance: {usdt_bal:.4f}")
-    print("Execution Agent ready — awaiting funded wallet to test swaps")
+    print(f"Connected:    {w3.is_connected()}")
+    print(f"Broker:       {WALLET}")
+    print(f"USDC balance: ${get_balance(USDC, WALLET):.4f}")
+    print(f"EURC balance: €{get_balance(EURC, WALLET):.4f}")
+    print(f"EUR/USD rate: {get_eurusd_rate()}")
+    print("FX Execution Agent ready")
