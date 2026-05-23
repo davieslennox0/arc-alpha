@@ -6,22 +6,46 @@ nohup: ignoring input
         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
         
   @app.on_event("startup")
-INFO:     Started server process [3786353]
+INFO:     Started server process [3794598]
 INFO:     Waiting for application startup.
-2026-05-23 15:06:14,591 [Monitor] Trade monitor started as background thread
+2026-05-23 16:34:46,273 [Monitor] Trade monitor started as background thread
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
-2026-05-23 15:06:18,125 [Monitor] Registered open trade: 9d12c59bb67f... EURUSD UP @ $0
-INFO:     127.0.0.1:47834 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 15:06:22,942 [Monitor] Registered open trade: 128122aa2255... EURUSD UP @ $0
-INFO:     127.0.0.1:56514 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 15:06:28,151 [Monitor] Registered open trade: 497b887a1640... EURUSD UP @ $0
-INFO:     127.0.0.1:56524 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 15:11:21,376 [Monitor] Registered open trade: 0a4ec29d575b... EURUSD DOWN @ $0
-INFO:     127.0.0.1:41634 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 15:12:26,633 [Monitor] Registered open trade: d1fbc681e6ff... EURUSD DOWN @ $0
-INFO:     127.0.0.1:36134 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 15:13:31,214 [Monitor] Registered open trade: a6d90e7029a3... EURUSD DOWN @ $0
-INFO:     127.0.0.1:34532 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 15:16:24,093 [Monitor] Registered open trade: d6c63ea0f98e... EURUSD UP @ $0
-INFO:     127.0.0.1:56876 - "POST /execute HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42146 - "GET /status HTTP/1.1" 200 OK
+2026-05-23 16:37:10,978 [Monitor] Registered open trade: 4238ab270ae3... EURUSD DOWN @ $0
+INFO:     127.0.0.1:46354 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:37:13,436 [Monitor] Registered open trade: 6c1891dc5f8c... EURUSD UP @ $0
+INFO:     127.0.0.1:46358 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:38:08,137 [Monitor] Registered open trade: ddfea95c13a6... EURUSD DOWN @ $0
+INFO:     127.0.0.1:57958 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:42:16,755 [Monitor] Registered open trade: 2e93373dc6e2... EURUSD DOWN @ $0
+INFO:     127.0.0.1:35756 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:43:14,152 [Monitor] Registered open trade: 26e71a853a9a... EURUSD UP @ $0
+INFO:     127.0.0.1:43370 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:45:10,735 [Monitor] Registered open trade: e4afab50e267... EURUSD UP @ $0
+INFO:     127.0.0.1:40394 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:47:19,782 [Monitor] Registered open trade: b6ef716cfba1... EURUSD UP @ $0
+INFO:     127.0.0.1:57568 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:49:17,312 [Monitor] Registered open trade: 68fbb2c78352... EURUSD DOWN @ $0
+INFO:     127.0.0.1:36272 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:52:13,854 [Monitor] Registered open trade: 6cf13bb7d8c4... EURUSD DOWN @ $0
+INFO:     127.0.0.1:54144 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:52:22,421 [Monitor] Registered open trade: 13de79ed926b... EURUSD DOWN @ $0
+INFO:     127.0.0.1:41004 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:55:20,109 [Monitor] Registered open trade: 773bf60cb6be... EURUSD UP @ $0
+INFO:     127.0.0.1:47042 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:57:28,326 [Monitor] Registered open trade: a30a666503cd... EURUSD UP @ $0
+INFO:     127.0.0.1:58778 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 16:59:16,975 [Monitor] Registered open trade: 7f6751fde648... EURUSD UP @ $0
+INFO:     127.0.0.1:54324 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 17:01:24,825 [Monitor] Registered open trade: 06353c804162... EURUSD DOWN @ $0
+INFO:     127.0.0.1:47766 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 17:02:31,864 [Monitor] Registered open trade: 78f63f8654ad... EURUSD DOWN @ $0
+INFO:     127.0.0.1:60850 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 17:06:19,835 [Monitor] Registered open trade: f0425d350a0e... EURUSD DOWN @ $0
+INFO:     127.0.0.1:54972 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 17:07:28,496 [Monitor] Registered open trade: 0a11ca8e2e04... EURUSD UP @ $0
+INFO:     127.0.0.1:47658 - "POST /execute HTTP/1.1" 200 OK
+2026-05-23 17:07:35,016 [Monitor] Registered open trade: 7edb46f73d07... EURUSD UP @ $0
+INFO:     127.0.0.1:33386 - "POST /execute HTTP/1.1" 200 OK
+INFO:     108.61.91.153:0 - "GET /status HTTP/1.1" 200 OK

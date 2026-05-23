@@ -1,65 +1,52 @@
-2026-05-23 13:31:38,699 [Monitor] Trade monitor started as background thread
-2026-05-23 13:32:27,608 [Monitor] Trade monitor started as background thread
-2026-05-23 13:35:19,895 [Monitor] Trade monitor started as background thread
-2026-05-23 13:36:44,961 [Monitor] Trade monitor started as background thread
-2026-05-23 13:36:44,985 [Monitor] Monitor error: Extra data: line 27360 column 4 (char 697135)
-2026-05-23 13:38:42,613 [Monitor] Trade monitor started as background thread
-2026-05-23 13:38:42,639 [Monitor] Monitor error: Extra data: line 27360 column 4 (char 697135)
-2026-05-23 13:51:49,402 [Monitor] Retrying request to /openai/v1/chat/completions in 0.909916 seconds
-2026-05-23 13:51:50,339 [Monitor] Retrying request to /openai/v1/chat/completions in 1.579354 seconds
-2026-05-23 13:51:52,852 [Monitor] Retrying request to /openai/v1/chat/completions in 0.978246 seconds
-2026-05-23 13:51:53,847 [Monitor] Retrying request to /openai/v1/chat/completions in 1.661935 seconds
-2026-05-23 13:51:58,184 [Monitor] Retrying request to /openai/v1/chat/completions in 0.805432 seconds
-2026-05-23 13:51:59,005 [Monitor] Retrying request to /openai/v1/chat/completions in 1.671148 seconds
-2026-05-23 13:56:54,838 [Monitor] Retrying request to /openai/v1/chat/completions in 0.800484 seconds
-2026-05-23 13:56:55,656 [Monitor] Retrying request to /openai/v1/chat/completions in 1.989363 seconds
-2026-05-23 13:56:57,459 [Monitor] Retrying request to /openai/v1/chat/completions in 0.940384 seconds
-2026-05-23 13:56:58,414 [Monitor] Retrying request to /openai/v1/chat/completions in 1.707855 seconds
-2026-05-23 13:57:02,824 [Monitor] Retrying request to /openai/v1/chat/completions in 0.902690 seconds
-2026-05-23 13:57:03,741 [Monitor] Retrying request to /openai/v1/chat/completions in 1.819435 seconds
-2026-05-23 14:01:59,667 [Monitor] Retrying request to /openai/v1/chat/completions in 0.931529 seconds
-2026-05-23 14:02:00,615 [Monitor] Retrying request to /openai/v1/chat/completions in 1.692041 seconds
-2026-05-23 14:02:01,968 [Monitor] Retrying request to /openai/v1/chat/completions in 0.805321 seconds
-2026-05-23 14:02:02,791 [Monitor] Retrying request to /openai/v1/chat/completions in 1.705525 seconds
-2026-05-23 14:02:07,204 [Monitor] Retrying request to /openai/v1/chat/completions in 0.817676 seconds
-2026-05-23 14:02:08,039 [Monitor] Retrying request to /openai/v1/chat/completions in 1.699937 seconds
-2026-05-23 14:07:04,181 [Monitor] Retrying request to /openai/v1/chat/completions in 0.938795 seconds
-2026-05-23 14:07:05,134 [Monitor] Retrying request to /openai/v1/chat/completions in 1.871477 seconds
-2026-05-23 14:07:06,404 [Monitor] Retrying request to /openai/v1/chat/completions in 0.900999 seconds
-2026-05-23 14:07:07,319 [Monitor] Retrying request to /openai/v1/chat/completions in 1.518268 seconds
-2026-05-23 14:07:11,888 [Monitor] Retrying request to /openai/v1/chat/completions in 0.996799 seconds
-2026-05-23 14:07:12,900 [Monitor] Retrying request to /openai/v1/chat/completions in 1.578582 seconds
-2026-05-23 14:12:08,838 [Monitor] Retrying request to /openai/v1/chat/completions in 0.941574 seconds
-2026-05-23 14:12:09,794 [Monitor] Retrying request to /openai/v1/chat/completions in 1.529599 seconds
-2026-05-23 14:12:10,782 [Monitor] Retrying request to /openai/v1/chat/completions in 0.778748 seconds
-2026-05-23 14:12:11,576 [Monitor] Retrying request to /openai/v1/chat/completions in 1.682964 seconds
-2026-05-23 14:12:16,567 [Monitor] Retrying request to /openai/v1/chat/completions in 0.899162 seconds
-2026-05-23 14:12:17,482 [Monitor] Retrying request to /openai/v1/chat/completions in 1.857221 seconds
-2026-05-23 14:13:06,311 [Monitor] Trade monitor started as background thread
-2026-05-23 14:15:11,113 [Monitor] Retrying request to /openai/v1/chat/completions in 0.783470 seconds
-2026-05-23 14:15:11,913 [Monitor] Retrying request to /openai/v1/chat/completions in 1.558138 seconds
-2026-05-23 14:15:16,052 [Monitor] Retrying request to /openai/v1/chat/completions in 0.889048 seconds
-2026-05-23 14:15:16,955 [Monitor] Retrying request to /openai/v1/chat/completions in 1.760652 seconds
-2026-05-23 14:15:21,075 [Monitor] Retrying request to /openai/v1/chat/completions in 0.974064 seconds
-2026-05-23 14:15:22,067 [Monitor] Retrying request to /openai/v1/chat/completions in 1.947069 seconds
-2026-05-23 14:17:10,533 [Monitor] Trade monitor started as background thread
-2026-05-23 14:17:14,840 [Monitor] Retrying request to /openai/v1/chat/completions in 0.803005 seconds
-2026-05-23 14:17:15,659 [Monitor] Retrying request to /openai/v1/chat/completions in 1.571161 seconds
-2026-05-23 14:17:20,291 [Monitor] Retrying request to /openai/v1/chat/completions in 0.810131 seconds
-2026-05-23 14:17:21,116 [Monitor] Retrying request to /openai/v1/chat/completions in 1.558966 seconds
-2026-05-23 14:18:27,139 [Monitor] Trade monitor started as background thread
-2026-05-23 14:18:31,982 [Monitor] Retrying request to /openai/v1/chat/completions in 0.830302 seconds
-2026-05-23 14:18:32,827 [Monitor] Retrying request to /openai/v1/chat/completions in 1.507840 seconds
-2026-05-23 14:18:36,567 [Monitor] Retrying request to /openai/v1/chat/completions in 0.857859 seconds
-2026-05-23 14:18:37,439 [Monitor] Retrying request to /openai/v1/chat/completions in 1.556838 seconds
-2026-05-23 14:32:58,497 [Monitor] Trade monitor started as background thread
-2026-05-23 14:38:47,188 [Monitor] Trade monitor started as background thread
-2026-05-23 14:52:44,186 [Monitor] Trade monitor started as background thread
-2026-05-23 15:06:14,591 [Monitor] Trade monitor started as background thread
-2026-05-23 15:06:18,125 [Monitor] Registered open trade: 9d12c59bb67f... EURUSD UP @ $0
-2026-05-23 15:06:22,942 [Monitor] Registered open trade: 128122aa2255... EURUSD UP @ $0
-2026-05-23 15:06:28,151 [Monitor] Registered open trade: 497b887a1640... EURUSD UP @ $0
-2026-05-23 15:11:21,376 [Monitor] Registered open trade: 0a4ec29d575b... EURUSD DOWN @ $0
-2026-05-23 15:12:26,633 [Monitor] Registered open trade: d1fbc681e6ff... EURUSD DOWN @ $0
-2026-05-23 15:13:31,214 [Monitor] Registered open trade: a6d90e7029a3... EURUSD DOWN @ $0
-2026-05-23 15:16:24,093 [Monitor] Registered open trade: d6c63ea0f98e... EURUSD UP @ $0
+2026-05-23 15:30:35,910 [Monitor] Registered open trade: d5e2bc02cb9b... EURUSD UP @ $0
+2026-05-23 15:31:33,740 [Monitor] Registered open trade: 8c5dcc858aa3... EURUSD DOWN @ $0
+2026-05-23 15:34:41,382 [Monitor] Registered open trade: d4bc64066fb5... EURUSD UP @ $0
+2026-05-23 15:36:36,336 [Monitor] Registered open trade: 4c987822cd45... EURUSD UP @ $0
+2026-05-23 15:36:38,813 [Monitor] Registered open trade: 394cefcd15b1... EURUSD DOWN @ $0
+2026-05-23 15:41:39,616 [Monitor] Registered open trade: 6b5353e318a1... EURUSD DOWN @ $0
+2026-05-23 15:41:44,265 [Monitor] Registered open trade: c67679effe5f... EURUSD DOWN @ $0
+2026-05-23 15:42:41,841 [Monitor] Registered open trade: 3c5413c844ed... EURUSD UP @ $0
+2026-05-23 15:46:42,846 [Monitor] Registered open trade: a90b24a8f63e... EURUSD UP @ $0
+2026-05-23 15:48:45,046 [Monitor] Registered open trade: 26e78a80bb5c... EURUSD DOWN @ $0
+2026-05-23 15:48:46,831 [Monitor] Registered open trade: 6016315c72ae... EURUSD UP @ $0
+2026-05-23 15:51:45,897 [Monitor] Registered open trade: 768e51d494e6... EURUSD DOWN @ $0
+2026-05-23 15:54:48,656 [Monitor] Registered open trade: 855b89f68ae8... EURUSD UP @ $0
+2026-05-23 15:55:49,748 [Monitor] Registered open trade: 5bbcf4b41c04... EURUSD DOWN @ $0
+2026-05-23 15:56:49,545 [Monitor] Registered open trade: c1a1d6fbd1f8... EURUSD UP @ $0
+2026-05-23 16:00:52,469 [Monitor] Registered open trade: 14d9a8a5c19d... EURUSD DOWN @ $0
+2026-05-23 16:01:52,553 [Monitor] Registered open trade: 7dfef7387caf... EURUSD DOWN @ $0
+2026-05-23 16:02:52,678 [Monitor] Registered open trade: 78cd64e88d82... EURUSD UP @ $0
+2026-05-23 16:06:54,425 [Monitor] An RPC error was returned by the node. Check the message provided in the error and any available logs for more information.
+2026-05-23 16:06:55,321 [Monitor] Registered open trade: c1d7798db1dd... EURUSD UP @ $0
+2026-05-23 16:09:56,101 [Monitor] Registered open trade: 97fcdbd18bbd... EURUSD DOWN @ $0
+2026-05-23 16:11:58,727 [Monitor] Registered open trade: 9a17a9e471eb... EURUSD DOWN @ $0
+2026-05-23 16:12:57,858 [Monitor] Registered open trade: 068fe6a9ff0c... EURUSD DOWN @ $0
+2026-05-23 16:16:58,982 [Monitor] Registered open trade: 5433bd5155de... EURUSD UP @ $0
+2026-05-23 16:17:02,022 [Monitor] Registered open trade: 99e3c0e7fe8d... EURUSD UP @ $0
+2026-05-23 16:19:01,178 [Monitor] Registered open trade: 3204183fefb3... EURUSD UP @ $0
+2026-05-23 16:22:05,011 [Monitor] Registered open trade: ff917454d860... EURUSD DOWN @ $0
+2026-05-23 16:24:01,919 [Monitor] Registered open trade: 10a1c46d6dd8... EURUSD DOWN @ $0
+2026-05-23 16:25:04,066 [Monitor] Registered open trade: e4706c7a1960... EURUSD DOWN @ $0
+2026-05-23 16:27:08,184 [Monitor] Registered open trade: 70e3d64bb512... EURUSD UP @ $0
+2026-05-23 16:31:04,974 [Monitor] Registered open trade: aa313b8496d6... EURUSD UP @ $0
+2026-05-23 16:31:06,543 [Monitor] Registered open trade: 4f73b2632468... EURUSD UP @ $0
+2026-05-23 16:32:10,920 [Monitor] Registered open trade: 19958c4ed9ca... EURUSD DOWN @ $0
+2026-05-23 16:34:46,273 [Monitor] Trade monitor started as background thread
+2026-05-23 16:37:10,978 [Monitor] Registered open trade: 4238ab270ae3... EURUSD DOWN @ $0
+2026-05-23 16:37:13,436 [Monitor] Registered open trade: 6c1891dc5f8c... EURUSD UP @ $0
+2026-05-23 16:38:08,137 [Monitor] Registered open trade: ddfea95c13a6... EURUSD DOWN @ $0
+2026-05-23 16:42:16,755 [Monitor] Registered open trade: 2e93373dc6e2... EURUSD DOWN @ $0
+2026-05-23 16:43:14,152 [Monitor] Registered open trade: 26e71a853a9a... EURUSD UP @ $0
+2026-05-23 16:45:10,735 [Monitor] Registered open trade: e4afab50e267... EURUSD UP @ $0
+2026-05-23 16:47:19,782 [Monitor] Registered open trade: b6ef716cfba1... EURUSD UP @ $0
+2026-05-23 16:49:17,312 [Monitor] Registered open trade: 68fbb2c78352... EURUSD DOWN @ $0
+2026-05-23 16:52:13,854 [Monitor] Registered open trade: 6cf13bb7d8c4... EURUSD DOWN @ $0
+2026-05-23 16:52:22,421 [Monitor] Registered open trade: 13de79ed926b... EURUSD DOWN @ $0
+2026-05-23 16:55:20,109 [Monitor] Registered open trade: 773bf60cb6be... EURUSD UP @ $0
+2026-05-23 16:57:28,326 [Monitor] Registered open trade: a30a666503cd... EURUSD UP @ $0
+2026-05-23 16:59:16,975 [Monitor] Registered open trade: 7f6751fde648... EURUSD UP @ $0
+2026-05-23 17:01:24,825 [Monitor] Registered open trade: 06353c804162... EURUSD DOWN @ $0
+2026-05-23 17:02:31,864 [Monitor] Registered open trade: 78f63f8654ad... EURUSD DOWN @ $0
+2026-05-23 17:06:19,835 [Monitor] Registered open trade: f0425d350a0e... EURUSD DOWN @ $0
+2026-05-23 17:07:28,496 [Monitor] Registered open trade: 0a11ca8e2e04... EURUSD UP @ $0
+2026-05-23 17:07:35,016 [Monitor] Registered open trade: 7edb46f73d07... EURUSD UP @ $0
