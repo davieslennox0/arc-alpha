@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlphaLoop Arc — AI FX Prime Broker</title>
+<title>AlphaFX — AI FX Prime Broker</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -783,7 +783,7 @@
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-logo">AlphaLoop Arc</div>
+  <div class="topbar-logo">AlphaFX</div>
   <div class="topbar-divider"></div>
 
   <div class="ticker-wrap" style="max-width: 600px;">
@@ -1126,13 +1126,29 @@
   </div>
 </div>
 
+<!-- FULL WIDTH TRADE FEED -->
+<div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:28px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:var(--bg3);border-bottom:1px solid var(--border);">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;">Live Execution Feed · Arc Testnet</span>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 1s ease-in-out infinite;"></div><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--red);">LIVE</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:80px 80px 70px 80px 1fr;padding:6px 20px;border-bottom:1px solid var(--border);background:var(--bg3);">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">TIME</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">AGENT</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">TYPE</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">AMOUNT</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);">TX HASH ↗</span>
+  </div>
+  <div id="feed-body-full" style="max-height:200px;overflow-y:auto;"></div>
+</div>
+
 <!-- FOOTER BAR -->
 <div class="footerbar">
   <div class="fb-item"><span class="key">BROKER</span><span class="val">0xB9d6...e40d</span></div>
   <div class="fb-item"><span class="key">NETWORK</span><span class="val">Arc Testnet · 5042002</span></div>
   <div class="fb-item"><span class="key">AGENTS</span><span class="val green">3 / 3 LIVE</span></div>
   <div class="fb-item"><span class="key">SETTLEMENT</span><span class="val green">USDC ↔ EURC</span></div>
-  <div class="fb-right">AlphaLoop Arc · Agora Agents Hackathon · Canteen × Circle · 2026</div>
+  <div class="fb-right">AlphaFX · Agora Agents Hackathon · Canteen × Circle · 2026</div>
 </div>
 
 <script>
@@ -1327,7 +1343,7 @@
       const items = Array.isArray(data) ? data : (data.activity || []);
       if (!items.length) return;
 
-      const feed = document.getElementById('feed-body');
+      const feed = document.getElementById("feed-body-full")');
       let html = '';
       const recent = items.slice(-20).reverse();
 
