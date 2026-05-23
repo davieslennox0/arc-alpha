@@ -1300,7 +1300,9 @@
 
       const perf = d.performance || {};
       document.getElementById('stat-wr').textContent = (perf.win_rate || 0).toFixed(1) + '%';
-      document.getElementById('stat-pnl').textContent = '$' + (perf.total_pnl_usdt || 0).toFixed(4);
+      const earnings = d.agent_earnings || {};
+      const totalEarned = Object.values(earnings).reduce((s,v) => s+v, 0);
+      document.getElementById('stat-pnl').textContent = '$' + totalEarned.toFixed(4);
       document.getElementById('stat-sharpe').textContent = (perf.sharpe_ratio || 0).toFixed(2);
 
       const total = d.trade_count || 0;
@@ -1320,8 +1322,9 @@
   async function fetchActivity() {
     try {
       const r = await fetch(`${BROKER}/activity`);
-      const items = await r.json();
-      if (!Array.isArray(items)) return;
+      const data = await r.json();
+      const items = Array.isArray(data) ? data : (data.activity || []);
+      if (!items.length) return;
 
       const feed = document.getElementById('feed-body');
       let html = '';
