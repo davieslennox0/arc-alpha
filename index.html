@@ -1,97 +1,1359 @@
-# AlphaLoop Arc — Autonomous AI FX Prime Broker
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlphaLoop Arc — AI FX Prime Broker</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-> Agora Agents Hackathon · Canteen × Circle · Arc Testnet
+  :root {
+    --bg:        #040608;
+    --bg2:       #080c10;
+    --bg3:       #0c1219;
+    --border:    #131c28;
+    --border2:   #1a2535;
+    --text:      #c8d8e8;
+    --muted:     #4a6070;
+    --dim:       #2a3a4a;
+    --green:     #00e5a0;
+    --green-dim: #00a870;
+    --red:       #ff4466;
+    --red-dim:   #cc2244;
+    --blue:      #4499ff;
+    --blue-dim:  #2266cc;
+    --gold:      #ffcc44;
+    --gold-dim:  #cc8800;
+    --white:     #eef4ff;
+  }
 
-AlphaLoop is a fully autonomous multi-agent prime broker that executes **AI-driven FX trades** on Arc — Circle's stablecoin-native L1. Agents analyze market signals and settle USDC/EURC currency pairs on-chain with sub-second finality.
+  html { scroll-behavior: smooth; }
 
-## Architecture
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
 
-```
-Scout Agent      →  reads macro signals, RSI, momentum, news
-Risk Agent       →  sizes position, approves/rejects trade
-Learning Agent   →  adapts strategy based on outcome history
-Execution Agent  →  settles USDC ↔ EURC FX trade on Arc
-```
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
 
-External agents (Alice, Bob, Charlie) pay via x402 micropayments and receive fully autonomous FX execution — no humans in the loop.
+  mono { font-family: 'IBM Plex Mono', monospace; }
 
-## What Makes It Agentic
+  /* TOP BAR */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 40px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 24px;
+    z-index: 100;
+  }
 
-- **Scout** pulls live price feeds, RSI, momentum, and Polymarket sentiment
-- **Risk** runs Kelly Criterion sizing and approves/rejects based on portfolio heat
-- **Learning** tracks win rates per strategy and adjusts allocation over time
-- **Execution** settles two on-chain transactions per trade: fee payment + FX delivery
+  .topbar-logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
 
-Every cycle is fully autonomous. No human triggers any trade.
+  .topbar-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border2);
+  }
 
-## Stack
+  .topbar-ticker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+  }
 
-| Layer | Tech |
-|-------|------|
-| Settlement | Arc Testnet (Chain ID: 5042002) |
-| FX Pair | USDC ↔ EURC (Circle native stablecoins) |
-| Broker API | FastAPI |
-| Agent Interface | MCP Server |
-| Signal Engine | Python — RSI, VWAP, Bollinger Bands, momentum |
-| Payment | x402 micropayments |
+  .topbar-ticker .label { color: var(--muted); }
+  .topbar-ticker .value { color: var(--white); font-weight: 500; }
+  .topbar-ticker .chg.up { color: var(--green); }
+  .topbar-ticker .chg.dn { color: var(--red); }
 
-## API Endpoints
+  .topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
 
-| Endpoint | Cost | Description |
-|----------|------|-------------|
-| `GET /preview/{asset}` | Free | Price + confidence preview |
-| `POST /signal` | $0.01 USDC | Full directional signal |
-| `POST /validate` | $0.02 USDC | Risk Agent validation |
-| `POST /execute` | $0.05 USDC | FX trade execution |
-| `POST /broker` | $0.02 USDC | Full 4-agent pipeline |
-| `GET /status` | Free | Portfolio + performance |
-| `GET /activity` | Free | Live trade feed |
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
 
-## FX Settlement Flow
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
 
-```
-Agent pays $0.05 USDC → Broker (x402 fee)        [TX 1]
-Scout scores signal → Risk sizes position
-Broker settles EURC → Agent (FX delivery)         [TX 2]
-Learning Agent records outcome → adjusts strategy
-```
+  .status-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 0.1em;
+  }
 
-Every trade = 2 confirmed on-chain transactions on Arc.
+  .topbar-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
 
-## Circle Tools Used
+  /* LAYOUT */
+  .main {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 220px 1fr 280px;
+    grid-template-rows: auto 1fr;
+    min-height: calc(100vh - 40px);
+  }
 
-- **USDC** — native gas token + payment settlement
-- **EURC** — FX delivery token (EUR-denominated)
-- **Arc Testnet** — sub-second finality, $0.01 fees
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 0;
+    grid-row: 1 / 3;
+  }
 
-## Live Demo
+  .sidebar-section {
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+  }
 
-**Broker:** `https://[your-domain]/`  
-**Explorer:** [Broker wallet on ArcScan](https://testnet.arcscan.app/address/0xB9d62aFC43C1d62887AdDBBD159A5F774209e40d)
+  .sidebar-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
 
-## Agents
+  .pair-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
 
-| Agent | Asset | Strategy |
-|-------|-------|----------|
-| Alice | EURUSD | Balanced — alternates long/short |
-| Bob | EURUSD | Balanced — 360s cycle |
-| Charlie | EURUSD | Balanced — 420s cycle |
+  .pair-row:last-child { border-bottom: none; }
+  .pair-row:hover { background: rgba(0,229,160,0.03); }
+  .pair-row.active { background: rgba(0,229,160,0.06); }
 
-Each agent runs independently, pays its own fees, and accumulates its own FX position history.
+  .pair-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--white);
+    font-weight: 500;
+  }
 
-## Running Locally
+  .pair-rate {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+  }
 
-```bash
-git clone https://github.com/davieslennox0/arc-alpha.git
-cd arc-alpha
-pip install -r requirements.txt
-cp .env.example .env  # fill in your keys
-python3 prime_broker.py   # starts broker on port 8002
-python3 demo_agents.py    # starts Alice, Bob, Charlie
-```
+  .pair-change {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+  }
 
-## Hackathon
+  .pair-change.up { color: var(--green); }
+  .pair-change.dn { color: var(--red); }
 
-Built for the [Agora Agents Hackathon](https://agora.thecanteenapp.com) by Canteen × Circle · May 2026.
+  /* CENTER */
+  .center {
+    display: flex;
+    flex-direction: column;
+  }
 
-**Team:** [@Syke0x](https://x.com/Syke0x)
+  /* HERO CHART AREA */
+  .chart-area {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chart-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    margin-bottom: 20px;
+  }
+
+  .chart-pair {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+
+  .chart-price {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .chart-price span {
+    font-size: 18px;
+    color: var(--muted);
+  }
+
+  .chart-meta {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+  }
+
+  .chart-stat { display: flex; flex-direction: column; gap: 2px; }
+  .chart-stat .cs-label { font-size: 10px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.1em; }
+  .chart-stat .cs-val { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text); }
+  .chart-stat .cs-val.up { color: var(--green); }
+  .chart-stat .cs-val.dn { color: var(--red); }
+
+  /* SVG CHART */
+  .svg-chart {
+    width: 100%;
+    height: 160px;
+    position: relative;
+  }
+
+  svg.chart {
+    width: 100%;
+    height: 160px;
+  }
+
+  .chart-grid {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-cell {
+    padding: 14px 20px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-cell:last-child { border-right: none; }
+
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.red { color: var(--red); }
+  .stat-value.gold { color: var(--gold); }
+
+  .stat-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* AGENTS PANEL */
+  .agents-panel {
+    padding: 20px 24px;
+    flex: 1;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .panel-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .panel-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    padding: 2px 8px;
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    letter-spacing: 0.1em;
+  }
+
+  /* AGENT CARDS */
+  .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .agent-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--green);
+    opacity: 0.6;
+  }
+
+  .agent-card.bob::before { background: var(--blue); }
+  .agent-card.charlie::before { background: var(--gold); }
+
+  .agent-card:hover { border-color: var(--border2); }
+
+  .agent-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.1em;
+    margin-bottom: 2px;
+  }
+
+  .agent-asset {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .agent-balance {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .agent-balance-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .agent-last-tx {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    word-break: break-all;
+    line-height: 1.4;
+  }
+
+  .agent-last-tx a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+
+  .agent-last-tx a:hover { color: var(--white); }
+
+  .agent-status {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* TRADE FEED */
+  .trade-feed {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .feed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+
+  .feed-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .feed-live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .feed-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  .feed-live-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--red);
+    letter-spacing: 0.1em;
+  }
+
+  .feed-body {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .feed-body::-webkit-scrollbar { width: 3px; }
+  .feed-body::-webkit-scrollbar-track { background: var(--bg2); }
+  .feed-body::-webkit-scrollbar-thumb { background: var(--border2); }
+
+  .feed-row {
+    display: grid;
+    grid-template-columns: 60px 50px 60px 70px 1fr;
+    padding: 7px 14px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    align-items: center;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-4px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .feed-row .time { color: var(--muted); }
+  .feed-row .agent { color: var(--text); }
+  .feed-row .type.buy { color: var(--green); }
+  .feed-row .type.sell { color: var(--red); }
+  .feed-row .amount { color: var(--white); }
+  .feed-row .hash a { color: var(--blue-dim); text-decoration: none; font-size: 9px; }
+  .feed-row .hash a:hover { color: var(--blue); }
+
+  /* RIGHT PANEL */
+  .right-panel {
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rp-section {
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .rp-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* ORDER BOOK STYLE */
+  .book-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+    position: relative;
+  }
+
+  .book-bar {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    opacity: 0.12;
+    border-radius: 1px;
+  }
+
+  .book-bar.bid { background: var(--green); }
+  .book-bar.ask { background: var(--red); }
+
+  .book-price {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    width: 70px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .book-price.bid { color: var(--green); }
+  .book-price.ask { color: var(--red); }
+
+  .book-size {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    position: relative;
+    z-index: 1;
+  }
+
+  .book-spread {
+    text-align: center;
+    padding: 5px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 4px 0;
+  }
+
+  /* PIPELINE */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pipe-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pipe-step::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+
+  .pipe-step.scout::after  { background: var(--blue); }
+  .pipe-step.risk::after   { background: var(--gold); }
+  .pipe-step.learn::after  { background: var(--green); }
+  .pipe-step.exec::after   { background: var(--red); }
+
+  .pipe-icon {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    width: 16px;
+    text-align: center;
+  }
+
+  .pipe-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text);
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .pipe-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--green);
+    letter-spacing: 0.05em;
+  }
+
+  /* EXECUTE BTN */
+  .execute-section {
+    padding: 16px;
+    margin-top: auto;
+  }
+
+  .fx-form { display: flex; flex-direction: column; gap: 10px; }
+
+  .fx-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .fx-select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 8px 10px;
+    outline: none;
+    appearance: none;
+  }
+
+  .fx-select:focus { border-color: var(--green); }
+
+  .fx-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .btn-buy {
+    background: rgba(0,229,160,0.1);
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .btn-buy:hover {
+    background: rgba(0,229,160,0.2);
+    box-shadow: 0 0 12px rgba(0,229,160,0.2);
+  }
+
+  .btn-sell {
+    background: rgba(255,68,102,0.1);
+    border: 1px solid var(--red-dim);
+    color: var(--red);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .btn-sell:hover {
+    background: rgba(255,68,102,0.2);
+    box-shadow: 0 0 12px rgba(255,68,102,0.2);
+  }
+
+  /* FOOTER BAR */
+  .footerbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 28px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 20px;
+    z-index: 100;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .fb-item { display: flex; gap: 6px; align-items: center; }
+  .fb-item .key { color: var(--muted); }
+  .fb-item .val { color: var(--text); }
+  .fb-item .val.green { color: var(--green); }
+
+  .fb-right { margin-left: auto; color: var(--dim); }
+
+  /* SCROLLING TICKER */
+  .ticker-wrap {
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 32px;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* CHART CANVAS */
+  .chart-canvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    margin-top: 8px;
+  }
+
+  canvas#priceChart {
+    width: 100%;
+    height: 140px;
+  }
+
+  .chart-overlay {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: right;
+  }
+
+  .co-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">AlphaLoop Arc</div>
+  <div class="topbar-divider"></div>
+
+  <div class="ticker-wrap" style="max-width: 600px;">
+    <div class="ticker-track" id="ticker">
+      <span class="topbar-ticker"><span class="label">EURUSD</span>&nbsp;<span class="value" id="t-eurusd">1.1595</span>&nbsp;<span class="chg up" id="t-eurusd-chg">+0.12%</span></span>
+      <span class="topbar-ticker"><span class="label">GBPUSD</span>&nbsp;<span class="value">1.2743</span>&nbsp;<span class="chg dn">-0.08%</span></span>
+      <span class="topbar-ticker"><span class="label">USDJPY</span>&nbsp;<span class="value">149.82</span>&nbsp;<span class="chg up">+0.21%</span></span>
+      <span class="topbar-ticker"><span class="label">USDCHF</span>&nbsp;<span class="value">0.9021</span>&nbsp;<span class="chg dn">-0.04%</span></span>
+      <span class="topbar-ticker"><span class="label">AUDUSD</span>&nbsp;<span class="value">0.6488</span>&nbsp;<span class="chg up">+0.09%</span></span>
+      <span class="topbar-ticker"><span class="label">USDC/EURC</span>&nbsp;<span class="value" id="t-usdc">0.8625</span>&nbsp;<span class="chg up">+0.11%</span></span>
+      <!-- duplicate for seamless loop -->
+      <span class="topbar-ticker"><span class="label">EURUSD</span>&nbsp;<span class="value">1.1595</span>&nbsp;<span class="chg up">+0.12%</span></span>
+      <span class="topbar-ticker"><span class="label">GBPUSD</span>&nbsp;<span class="value">1.2743</span>&nbsp;<span class="chg dn">-0.08%</span></span>
+      <span class="topbar-ticker"><span class="label">USDJPY</span>&nbsp;<span class="value">149.82</span>&nbsp;<span class="chg up">+0.21%</span></span>
+      <span class="topbar-ticker"><span class="label">USDCHF</span>&nbsp;<span class="value">0.9021</span>&nbsp;<span class="chg dn">-0.04%</span></span>
+      <span class="topbar-ticker"><span class="label">AUDUSD</span>&nbsp;<span class="value">0.6488</span>&nbsp;<span class="chg up">+0.09%</span></span>
+      <span class="topbar-ticker"><span class="label">USDC/EURC</span>&nbsp;<span class="value">0.8625</span>&nbsp;<span class="chg up">+0.11%</span></span>
+    </div>
+  </div>
+
+  <div class="topbar-right">
+    <div class="status-dot"></div>
+    <span class="status-label">LIVE · ARC TESTNET</span>
+    <div class="topbar-divider"></div>
+    <span class="topbar-time" id="clock">--:--:-- UTC</span>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">FX Pairs</div>
+      <div class="pair-row active">
+        <div>
+          <div class="pair-name">EURUSD</div>
+          <div class="pair-change up" style="font-size:9px;margin-top:2px;">USDC/EURC</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="pair-rate" id="s-eurusd">1.1595</div>
+          <div class="pair-change up">+0.12%</div>
+        </div>
+      </div>
+      <div class="pair-row">
+        <div>
+          <div class="pair-name">GBPUSD</div>
+          <div class="pair-change" style="font-size:9px;color:var(--muted);margin-top:2px;">GBP/USD</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="pair-rate">1.2743</div>
+          <div class="pair-change dn">-0.08%</div>
+        </div>
+      </div>
+      <div class="pair-row">
+        <div>
+          <div class="pair-name">USDJPY</div>
+          <div class="pair-change" style="font-size:9px;color:var(--muted);margin-top:2px;">USD/JPY</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="pair-rate" style="color:var(--text);">149.82</div>
+          <div class="pair-change up">+0.21%</div>
+        </div>
+      </div>
+      <div class="pair-row">
+        <div>
+          <div class="pair-name">AUDUSD</div>
+          <div class="pair-change" style="font-size:9px;color:var(--muted);margin-top:2px;">AUD/USD</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="pair-rate" style="color:var(--text);">0.6488</div>
+          <div class="pair-change up">+0.09%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Portfolio</div>
+      <div style="margin-bottom:10px;">
+        <div class="stat-label" style="margin-bottom:4px;">USDC Balance</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--white);" id="s-usdc-bal">$—</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div class="stat-label" style="margin-bottom:4px;">EURC Balance</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--green);" id="s-eurc-bal">€—</div>
+      </div>
+      <div>
+        <div class="stat-label" style="margin-bottom:4px;">Total Trades</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--gold);" id="s-trades">—</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Settlement</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;">
+          <span style="color:var(--muted);">Chain</span>
+          <span style="color:var(--text);">Arc Testnet</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;">
+          <span style="color:var(--muted);">Chain ID</span>
+          <span style="color:var(--text);">5042002</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;">
+          <span style="color:var(--muted);">Finality</span>
+          <span style="color:var(--green);">&lt;1s</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;">
+          <span style="color:var(--muted);">Fee/tx</span>
+          <span style="color:var(--green);">~$0.01</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;">
+          <span style="color:var(--muted);">Explorer</span>
+          <a href="https://testnet.arcscan.app" target="_blank" style="color:var(--blue);text-decoration:none;font-size:10px;">arcscan.app ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- CHART AREA -->
+    <div class="chart-area">
+      <div class="chart-header">
+        <div>
+          <div class="chart-pair">EUR / USD</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.1em;">USDC ↔ EURC · Arc Settlement</div>
+        </div>
+        <div>
+          <div class="chart-price"><span>$</span><span id="main-price">1.1595</span></div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--green);margin-top:4px;" id="main-chg">▲ +0.0014 (+0.12%)</div>
+        </div>
+        <div class="chart-meta">
+          <div class="chart-stat">
+            <span class="cs-label">OPEN</span>
+            <span class="cs-val">1.1581</span>
+          </div>
+          <div class="chart-stat">
+            <span class="cs-label">HIGH</span>
+            <span class="cs-val up" id="cs-high">1.1612</span>
+          </div>
+          <div class="chart-stat">
+            <span class="cs-label">LOW</span>
+            <span class="cs-val dn" id="cs-low">1.1574</span>
+          </div>
+          <div class="chart-stat">
+            <span class="cs-label">TRADES</span>
+            <span class="cs-val" id="cs-trades">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-canvas-wrap">
+        <canvas id="priceChart"></canvas>
+      </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-cell">
+        <span class="stat-label">Portfolio Value</span>
+        <span class="stat-value green" id="stat-pv">$—</span>
+        <span class="stat-sub">USDC</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Win Rate</span>
+        <span class="stat-value gold" id="stat-wr">—%</span>
+        <span class="stat-sub">All strategies</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Total PnL</span>
+        <span class="stat-value green" id="stat-pnl">$—</span>
+        <span class="stat-sub">Cumulative</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Sharpe Ratio</span>
+        <span class="stat-value" id="stat-sharpe">—</span>
+        <span class="stat-sub">Risk-adjusted</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Active Agents</span>
+        <span class="stat-value green">3</span>
+        <span class="stat-sub">Alice · Bob · Charlie</span>
+      </div>
+    </div>
+
+    <!-- AGENTS PANEL -->
+    <div class="agents-panel">
+      <div class="panel-header">
+        <span class="panel-title">Agent Fleet</span>
+        <span class="panel-badge">3 ACTIVE</span>
+      </div>
+
+      <div class="agent-grid">
+        <div class="agent-card alice">
+          <div class="agent-status"></div>
+          <div class="agent-name">ALICE</div>
+          <div class="agent-asset">EURUSD · 300s CYCLE</div>
+          <div class="agent-balance" id="alice-bal">$—</div>
+          <div class="agent-balance-label">USDC Balance</div>
+          <div class="agent-last-tx" id="alice-tx">Awaiting trade...</div>
+        </div>
+        <div class="agent-card bob">
+          <div class="agent-status" style="background:var(--blue);box-shadow:0 0 6px var(--blue);"></div>
+          <div class="agent-name">BOB</div>
+          <div class="agent-asset">EURUSD · 360s CYCLE</div>
+          <div class="agent-balance" id="bob-bal">$—</div>
+          <div class="agent-balance-label">USDC Balance</div>
+          <div class="agent-last-tx" id="bob-tx">Awaiting trade...</div>
+        </div>
+        <div class="agent-card charlie">
+          <div class="agent-status" style="background:var(--gold);box-shadow:0 0 6px var(--gold);animation:pulse 2s ease-in-out infinite;"></div>
+          <div class="agent-name">CHARLIE</div>
+          <div class="agent-asset">EURUSD · 420s CYCLE</div>
+          <div class="agent-balance" id="charlie-bal">$—</div>
+          <div class="agent-balance-label">USDC Balance</div>
+          <div class="agent-last-tx" id="charlie-tx">Awaiting trade...</div>
+        </div>
+      </div>
+
+      <!-- TRADE FEED -->
+      <div class="trade-feed">
+        <div class="feed-header">
+          <span class="feed-title">Live Execution Feed · Arc Testnet</span>
+          <div class="feed-live">
+            <div class="feed-dot"></div>
+            <span class="feed-live-label">LIVE</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:60px 50px 60px 70px 1fr;padding:6px 14px;border-bottom:1px solid var(--border);background:var(--bg3);">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">TIME</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">AGENT</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">TYPE</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">AMOUNT</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">TX HASH</span>
+        </div>
+        <div class="feed-body" id="feed-body">
+          <div style="padding:20px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">
+            Connecting to broker...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+
+    <!-- ORDER BOOK -->
+    <div class="rp-section">
+      <div class="rp-title">EURC / USDC Book</div>
+      <div id="ask-book"></div>
+      <div class="book-spread" id="spread">Spread: 0.0002</div>
+      <div id="bid-book"></div>
+    </div>
+
+    <!-- AGENT PIPELINE -->
+    <div class="rp-section">
+      <div class="rp-title">Agent Pipeline</div>
+      <div class="pipeline">
+        <div class="pipe-step scout">
+          <span class="pipe-icon">◈</span>
+          <span class="pipe-name">Scout</span>
+          <span class="pipe-status">ACTIVE</span>
+        </div>
+        <div style="display:flex;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);">↓</div>
+        <div class="pipe-step risk">
+          <span class="pipe-icon">◉</span>
+          <span class="pipe-name">Risk</span>
+          <span class="pipe-status">ACTIVE</span>
+        </div>
+        <div style="display:flex;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);">↓</div>
+        <div class="pipe-step learn">
+          <span class="pipe-icon">◎</span>
+          <span class="pipe-name">Learning</span>
+          <span class="pipe-status">ACTIVE</span>
+        </div>
+        <div style="display:flex;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);">↓</div>
+        <div class="pipe-step exec">
+          <span class="pipe-icon">◆</span>
+          <span class="pipe-name">Execution</span>
+          <span class="pipe-status">ACTIVE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT PROTOCOL -->
+    <div class="rp-section">
+      <div class="rp-title">x402 Fee Schedule</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;">
+          <span style="color:var(--muted);">GET /signal</span>
+          <span style="color:var(--text);">$0.01 USDC</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;">
+          <span style="color:var(--muted);">POST /validate</span>
+          <span style="color:var(--text);">$0.02 USDC</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;background:rgba(0,229,160,0.05);padding:4px 6px;border:1px solid var(--border2);">
+          <span style="color:var(--green);">POST /execute</span>
+          <span style="color:var(--green);font-weight:600;">$0.05 USDC</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;">
+          <span style="color:var(--muted);">POST /broker</span>
+          <span style="color:var(--text);">$0.02 USDC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTE FORM -->
+    <div class="execute-section">
+      <div class="rp-title" style="margin-bottom:12px;">Manual Execute</div>
+      <div class="fx-form">
+        <div>
+          <label class="fx-label">Pair</label>
+          <select class="fx-select">
+            <option>EURUSD (USDC/EURC)</option>
+          </select>
+        </div>
+        <div>
+          <label class="fx-label">Amount (USDC)</label>
+          <select class="fx-select">
+            <option>0.50 USDC</option>
+            <option>1.00 USDC</option>
+            <option>2.00 USDC</option>
+          </select>
+        </div>
+        <div class="fx-row">
+          <button class="btn-buy" onclick="alert('Connect broker endpoint to execute')">▲ BUY</button>
+          <button class="btn-sell" onclick="alert('Connect broker endpoint to execute')">▼ SELL</button>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);text-align:center;">
+          Settled on Arc · $0.05 USDC fee
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER BAR -->
+<div class="footerbar">
+  <div class="fb-item"><span class="key">BROKER</span><span class="val">0xB9d6...e40d</span></div>
+  <div class="fb-item"><span class="key">NETWORK</span><span class="val">Arc Testnet · 5042002</span></div>
+  <div class="fb-item"><span class="key">AGENTS</span><span class="val green">3 / 3 LIVE</span></div>
+  <div class="fb-item"><span class="key">SETTLEMENT</span><span class="val green">USDC ↔ EURC</span></div>
+  <div class="fb-right">AlphaLoop Arc · Agora Agents Hackathon · Canteen × Circle · 2026</div>
+</div>
+
+<script>
+  const BROKER = 'http://localhost:8002';
+
+  // CLOCK
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toUTCString().split(' ')[4] + ' UTC';
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // PRICE CHART
+  const canvas = document.getElementById('priceChart');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+  canvas.height = 140 * window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+  let priceHistory = [];
+  const BASE = 1.1595;
+
+  function genInitialPrices() {
+    let p = BASE - 0.002;
+    for (let i = 0; i < 80; i++) {
+      p += (Math.random() - 0.48) * 0.0008;
+      priceHistory.push(parseFloat(p.toFixed(5)));
+    }
+  }
+
+  genInitialPrices();
+
+  function drawChart() {
+    const W = canvas.offsetWidth;
+    const H = 140;
+    ctx.clearRect(0, 0, W, H);
+
+    const min = Math.min(...priceHistory) - 0.0005;
+    const max = Math.max(...priceHistory) + 0.0005;
+    const range = max - min;
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(19,28,40,0.8)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const y = (H / 4) * i;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W, y);
+      ctx.stroke();
+    }
+
+    // Area fill
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, 'rgba(0,229,160,0.15)');
+    grad.addColorStop(1, 'rgba(0,229,160,0)');
+
+    ctx.beginPath();
+    priceHistory.forEach((p, i) => {
+      const x = (i / (priceHistory.length - 1)) * W;
+      const y = H - ((p - min) / range) * H;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.lineTo(W, H);
+    ctx.lineTo(0, H);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    ctx.strokeStyle = '#00e5a0';
+    ctx.lineWidth = 1.5;
+    priceHistory.forEach((p, i) => {
+      const x = (i / (priceHistory.length - 1)) * W;
+      const y = H - ((p - min) / range) * H;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Last price dot
+    const lastX = W;
+    const lastY = H - ((priceHistory[priceHistory.length-1] - min) / range) * H;
+    ctx.beginPath();
+    ctx.arc(lastX - 2, lastY, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#00e5a0';
+    ctx.fill();
+  }
+
+  drawChart();
+
+  function tickPrice() {
+    const last = priceHistory[priceHistory.length - 1];
+    const next = parseFloat((last + (Math.random() - 0.48) * 0.0006).toFixed(5));
+    priceHistory.push(next);
+    if (priceHistory.length > 80) priceHistory.shift();
+
+    const display = next.toFixed(4);
+    document.getElementById('main-price').textContent = display;
+    document.getElementById('s-eurusd').textContent = display;
+    document.getElementById('t-eurusd').textContent = display;
+
+    const change = next - BASE;
+    const pct = ((change / BASE) * 100).toFixed(2);
+    const chgEl = document.getElementById('main-chg');
+    if (change >= 0) {
+      chgEl.textContent = `▲ +${change.toFixed(4)} (+${pct}%)`;
+      chgEl.style.color = 'var(--green)';
+    } else {
+      chgEl.textContent = `▼ ${change.toFixed(4)} (${pct}%)`;
+      chgEl.style.color = 'var(--red)';
+    }
+
+    drawChart();
+  }
+
+  setInterval(tickPrice, 2000);
+
+  // ORDER BOOK
+  function renderBook() {
+    const mid = priceHistory[priceHistory.length-1] || BASE;
+    const asks = [], bids = [];
+    for (let i = 0; i < 5; i++) {
+      asks.push({ price: (mid + 0.0001 * (i+1)).toFixed(5), size: (Math.random()*5+1).toFixed(2) });
+      bids.push({ price: (mid - 0.0001 * (i+1)).toFixed(5), size: (Math.random()*5+1).toFixed(2) });
+    }
+
+    const askHtml = asks.slice().reverse().map(a =>
+      `<div class="book-row">
+        <div class="book-bar ask" style="width:${Math.random()*60+20}%"></div>
+        <span class="book-price ask">${a.price}</span>
+        <span class="book-size">${a.size}K</span>
+      </div>`
+    ).join('');
+
+    const bidHtml = bids.map(b =>
+      `<div class="book-row">
+        <div class="book-bar bid" style="width:${Math.random()*60+20}%"></div>
+        <span class="book-price bid">${b.price}</span>
+        <span class="book-size">${b.size}K</span>
+      </div>`
+    ).join('');
+
+    document.getElementById('ask-book').innerHTML = askHtml;
+    document.getElementById('bid-book').innerHTML = bidHtml;
+  }
+
+  renderBook();
+  setInterval(renderBook, 3000);
+
+  // FETCH STATUS
+  async function fetchStatus() {
+    try {
+      const r = await fetch(`${BROKER}/status`);
+      const d = await r.json();
+
+      const pv = d.portfolio_value_usdt || 0;
+      document.getElementById('stat-pv').textContent = '$' + pv.toFixed(2);
+      document.getElementById('s-usdc-bal').textContent = '$' + pv.toFixed(2);
+
+      const perf = d.performance || {};
+      document.getElementById('stat-wr').textContent = (perf.win_rate || 0).toFixed(1) + '%';
+      document.getElementById('stat-pnl').textContent = '$' + (perf.total_pnl_usdt || 0).toFixed(4);
+      document.getElementById('stat-sharpe').textContent = (perf.sharpe_ratio || 0).toFixed(2);
+
+      const leader = d.leaderboard || [];
+      const total = leader.reduce((s, l) => s + (l.trades || 0), 0);
+      document.getElementById('s-trades').textContent = total;
+      document.getElementById('cs-trades').textContent = total;
+    } catch(e) {}
+  }
+
+  // FETCH ACTIVITY
+  let knownTxs = new Set();
+
+  async function fetchActivity() {
+    try {
+      const r = await fetch(`${BROKER}/activity`);
+      const items = await r.json();
+      if (!Array.isArray(items)) return;
+
+      const feed = document.getElementById('feed-body');
+      let html = '';
+      const recent = items.slice(-20).reverse();
+
+      if (recent.length === 0) {
+        feed.innerHTML = '<div style="padding:20px;text-align:center;font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--muted);">No trades yet...</div>';
+        return;
+      }
+
+      recent.forEach(item => {
+        const t = new Date(item.timestamp * 1000);
+        const time = t.toUTCString().split(' ')[4].slice(0,8);
+        const agent = (item.agent_id || '?').slice(0,5).toUpperCase();
+        const status = item.status || '?';
+        const isSuccess = status === 'success';
+        const typeLabel = isSuccess ? (item.direction === 'UP' ? 'BUY' : 'SELL') : status.toUpperCase();
+        const typeClass = isSuccess ? (item.direction === 'UP' ? 'buy' : 'sell') : '';
+        const hash = item.tx_hash || '';
+        const shortHash = hash ? hash.slice(0,12) + '...' : '—';
+        const explorerUrl = hash ? `https://testnet.arcscan.app/tx/0x${hash}` : '#';
+
+        html += `<div class="feed-row">
+          <span class="time">${time}</span>
+          <span class="agent">${agent}</span>
+          <span class="type ${typeClass}">${typeLabel}</span>
+          <span class="amount">$0.50</span>
+          <span class="hash"><a href="${explorerUrl}" target="_blank">${shortHash}</a></span>
+        </div>`;
+      });
+
+      feed.innerHTML = html;
+    } catch(e) {}
+  }
+
+  fetchStatus();
+  fetchActivity();
+  setInterval(fetchStatus, 5000);
+  setInterval(fetchActivity, 8000);
+</script>
+</body>
+</html>

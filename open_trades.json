@@ -810,5 +810,47 @@
       "asset": "EURUSD"
     },
     "opened_at": 1779556055
+  },
+  "d40511e64f7f62d8484ec60332a330ea4d7f01e40d217016cb2ce4d4bf19d76f": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779556358
+  },
+  "bfeabe24cb791535166cdd54661272c273a48f07542fe90e95717f94600381b3": {
+    "asset": "EURUSD",
+    "direction": "UP",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779556402
+  },
+  "5dff19cb3e516b08dae6058a1637d93cb87a3d0d722a003f959303b609e862fb": {
+    "asset": "EURUSD",
+    "direction": "DOWN",
+    "entry_price": 0,
+    "size_usdt": 0.5,
+    "stop_loss_pct": 1.5,
+    "take_profit_pct": 3.0,
+    "strategy": "balanced",
+    "signal": {
+      "error": "No data for EURUSD",
+      "asset": "EURUSD"
+    },
+    "opened_at": 1779556411
   }
 }
