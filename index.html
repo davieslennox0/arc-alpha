@@ -1320,8 +1320,9 @@
   async function fetchActivity() {
     try {
       const r = await fetch(`${BROKER}/activity`, {mode:'cors'});
-      const items = await r.json();
-      if (!Array.isArray(items)) return;
+      const data = await r.json();
+      const items = Array.isArray(data) ? data : (data.activity || []);
+      if (!items.length) return;
 
       const feed = document.getElementById('feed-body');
       let html = '';
