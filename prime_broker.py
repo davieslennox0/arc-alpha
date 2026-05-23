@@ -181,8 +181,42 @@ def status():
     pv = get_portfolio_value()
     stats = get_performance_stats()
     board = get_leaderboard()
+
+    # EURC balance
+    try:
+        EURC = Web3.to_checksum_address("0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a")
+        EURC_ABI = [{"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"type":"function","stateMutability":"view"}]
+        eurc = w3.eth.contract(address=EURC, abi=EURC_ABI)
+        eurc_bal = eurc.functions.balanceOf(BROKER_WALLET).call() / 1e6
+    except:
+        eurc_bal = 0
+
+    # Agent balances
+    agent_balances = {}
+    USDC_ABI = [{"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"type":"function","stateMutability":"view"}]
+    USDC_CONTRACT = Web3.to_checksum_address("0x3600000000000000000000000000000000000000")
+    usdc = w3.eth.contract(address=USDC_CONTRACT, abi=USDC_ABI)
+    for name, info in AGENT_REGISTRY.items():
+        try:
+            bal = usdc.functions.balanceOf(Web3.to_checksum_address(info["wallet"])).call() / 1e6
+            agent_balances[name] = round(bal, 4)
+        except:
+            agent_balances[name] = 0
+
+    # Trade count from activity log
+    try:
+        with open("activity_log.json") as f:
+            import json as _json
+            acts = _json.load(f)
+            trade_count = len([x for x in acts if x.get("status") == "success"])
+    except:
+        trade_count = 0
+
     return {
         "portfolio_value_usdt": pv,
+        "eurc_balance": eurc_bal,
+        "agent_balances": agent_balances,
+        "trade_count": trade_count,
         "performance": stats,
         "leaderboard": board,
         "agent_earnings": AGENT_EARNINGS,

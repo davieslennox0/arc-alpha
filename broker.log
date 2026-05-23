@@ -1,57 +1,14 @@
 nohup: ignoring input
-/root/arc-alpha/prime_broker.py:431: DeprecationWarning: 
+/root/arc-alpha/prime_broker.py:465: DeprecationWarning: 
         on_event is deprecated, use lifespan event handlers instead.
 
         Read more about it in the
         [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
         
   @app.on_event("startup")
-INFO:     Started server process [3794598]
+INFO:     Started server process [3814512]
 INFO:     Waiting for application startup.
-2026-05-23 16:34:46,273 [Monitor] Trade monitor started as background thread
+2026-05-23 19:59:56,754 [Monitor] Trade monitor started as background thread
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
-INFO:     127.0.0.1:42146 - "GET /status HTTP/1.1" 200 OK
-2026-05-23 16:37:10,978 [Monitor] Registered open trade: 4238ab270ae3... EURUSD DOWN @ $0
-INFO:     127.0.0.1:46354 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:37:13,436 [Monitor] Registered open trade: 6c1891dc5f8c... EURUSD UP @ $0
-INFO:     127.0.0.1:46358 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:38:08,137 [Monitor] Registered open trade: ddfea95c13a6... EURUSD DOWN @ $0
-INFO:     127.0.0.1:57958 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:42:16,755 [Monitor] Registered open trade: 2e93373dc6e2... EURUSD DOWN @ $0
-INFO:     127.0.0.1:35756 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:43:14,152 [Monitor] Registered open trade: 26e71a853a9a... EURUSD UP @ $0
-INFO:     127.0.0.1:43370 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:45:10,735 [Monitor] Registered open trade: e4afab50e267... EURUSD UP @ $0
-INFO:     127.0.0.1:40394 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:47:19,782 [Monitor] Registered open trade: b6ef716cfba1... EURUSD UP @ $0
-INFO:     127.0.0.1:57568 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:49:17,312 [Monitor] Registered open trade: 68fbb2c78352... EURUSD DOWN @ $0
-INFO:     127.0.0.1:36272 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:52:13,854 [Monitor] Registered open trade: 6cf13bb7d8c4... EURUSD DOWN @ $0
-INFO:     127.0.0.1:54144 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:52:22,421 [Monitor] Registered open trade: 13de79ed926b... EURUSD DOWN @ $0
-INFO:     127.0.0.1:41004 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:55:20,109 [Monitor] Registered open trade: 773bf60cb6be... EURUSD UP @ $0
-INFO:     127.0.0.1:47042 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:57:28,326 [Monitor] Registered open trade: a30a666503cd... EURUSD UP @ $0
-INFO:     127.0.0.1:58778 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 16:59:16,975 [Monitor] Registered open trade: 7f6751fde648... EURUSD UP @ $0
-INFO:     127.0.0.1:54324 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 17:01:24,825 [Monitor] Registered open trade: 06353c804162... EURUSD DOWN @ $0
-INFO:     127.0.0.1:47766 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 17:02:31,864 [Monitor] Registered open trade: 78f63f8654ad... EURUSD DOWN @ $0
-INFO:     127.0.0.1:60850 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 17:06:19,835 [Monitor] Registered open trade: f0425d350a0e... EURUSD DOWN @ $0
-INFO:     127.0.0.1:54972 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 17:07:28,496 [Monitor] Registered open trade: 0a11ca8e2e04... EURUSD UP @ $0
-INFO:     127.0.0.1:47658 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 17:07:35,016 [Monitor] Registered open trade: 7edb46f73d07... EURUSD UP @ $0
-INFO:     127.0.0.1:33386 - "POST /execute HTTP/1.1" 200 OK
-INFO:     108.61.91.153:0 - "GET /status HTTP/1.1" 200 OK
-2026-05-23 17:12:38,108 [Monitor] Registered open trade: d40511e64f7f... EURUSD DOWN @ $0
-INFO:     127.0.0.1:34518 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 17:13:22,912 [Monitor] Registered open trade: bfeabe24cb79... EURUSD UP @ $0
-INFO:     127.0.0.1:58728 - "POST /execute HTTP/1.1" 200 OK
-2026-05-23 17:13:31,857 [Monitor] Registered open trade: 5dff19cb3e51... EURUSD DOWN @ $0
-INFO:     127.0.0.1:57282 - "POST /execute HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34194 - "GET /status HTTP/1.1" 200 OK

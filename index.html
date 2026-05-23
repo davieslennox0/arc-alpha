@@ -1295,15 +1295,22 @@
       document.getElementById('stat-pv').textContent = '$' + pv.toFixed(2);
       document.getElementById('s-usdc-bal').textContent = '$' + pv.toFixed(2);
 
+      const eurc = d.eurc_balance || 0;
+      document.getElementById('s-eurc-bal').textContent = '\u20ac' + eurc.toFixed(2);
+
       const perf = d.performance || {};
       document.getElementById('stat-wr').textContent = (perf.win_rate || 0).toFixed(1) + '%';
       document.getElementById('stat-pnl').textContent = '$' + (perf.total_pnl_usdt || 0).toFixed(4);
       document.getElementById('stat-sharpe').textContent = (perf.sharpe_ratio || 0).toFixed(2);
 
-      const leader = d.leaderboard || [];
-      const total = leader.reduce((s, l) => s + (l.trades || 0), 0);
+      const total = d.trade_count || 0;
       document.getElementById('s-trades').textContent = total;
       document.getElementById('cs-trades').textContent = total;
+
+      const ab = d.agent_balances || {};
+      document.getElementById('alice-bal').textContent = '$' + (ab.alice || 0).toFixed(2);
+      document.getElementById('bob-bal').textContent = '$' + (ab.bob || 0).toFixed(2);
+      document.getElementById('charlie-bal').textContent = '$' + (ab.charlie || 0).toFixed(2);
     } catch(e) {}
   }
 
