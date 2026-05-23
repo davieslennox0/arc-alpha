@@ -1,0 +1,15 @@
+.env
+*.log
+__pycache__/
+*.pkl
+*.pyc
+moltbook_state.json
+agent_earnings.json
+activity_log.json
+open_trades.json
+trade_history.json
+strategy_history.json
+scout_feed.json
+skills-lock.json
+refill.log
+tunnel.log
